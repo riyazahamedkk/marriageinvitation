@@ -318,15 +318,17 @@
                     <img src="image_979c79.png" alt="Tap to view" class="tap-icon-img" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'60\' height=\'60\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'white\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'><path d=\'M18 11V6a2 2 0 0 0-4 0v4\'/><path d=\'M14 10V5a2 2 0 0 0-4 0v5\'/><path d=\'M10 10.5V4a2 2 0 0 0-4 0v9.5\'/><path d=\'M6 14v-1.5a2 2 0 0 0-4 0V16c0 4.4 3.6 8 8 8h3.3a2 2 0 0 0 1.9-1.3l2.6-7.8c.4-1.2-.4-2.5-1.7-2.7h-4.2l.6-1.2Z\'/></svg>'">
                 </div>
 
-                <!-- Hidden Content behind curtains with adjusted text sizes so it won't overflow/hide -->
+                <!-- Hidden Content behind curtains restricted width so text doesn't overlap red area -->
                 <div class="curtain-content">
-                    <h1 class="font-cursive text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-red-950 font-medium tracking-wide drop-shadow-sm leading-tight w-full px-2 md:px-4">
-                        Abdul Sathar<br/>Moomeen
-                    </h1>
-                    <span class="font-cormorant text-xl md:text-3xl text-yellow-600 my-2 md:my-4">&amp;</span>
-                    <h1 class="font-cursive text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-red-950 font-medium tracking-wide drop-shadow-sm leading-tight w-full px-2 md:px-4">
-                        Rukzana Fathima
-                    </h1>
+                    <div class="w-[75%] sm:w-[65%] md:w-[55%] flex flex-col items-center justify-center text-center">
+                        <h1 class="font-cursive text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-red-950 font-medium tracking-wide drop-shadow-sm leading-tight w-full">
+                            Abdul Sathar<br/>Moomeen
+                        </h1>
+                        <span class="font-cormorant text-xl md:text-3xl text-yellow-600 my-2 md:my-4">&amp;</span>
+                        <h1 class="font-cursive text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-red-950 font-medium tracking-wide drop-shadow-sm leading-tight w-full">
+                            Rukzana Fathima
+                        </h1>
+                    </div>
                 </div>
             </div>
         </div>
@@ -343,12 +345,12 @@
         <!-- Layout for Date, Countdown, Location, Lunch with even spacing -->
         <div class="flex flex-col gap-16 md:gap-24 items-center w-full max-w-5xl my-10">
             
-            <!-- 1. The Date (Scratch Reveal) - Moved to be first -->
+            <!-- 1. The Date (Scratch Reveal) -->
             <div class="w-full flex flex-col items-center reveal relative z-10">
                 <h2 class="font-cinzel text-xl md:text-3xl text-gold tracking-[0.25em] mb-4 drop-shadow-md">Reveal the Date</h2>
                 <p class="font-montserrat text-[10px] md:text-sm tracking-widest text-gray-400 mb-10 uppercase">Scratch all three circles to continue</p>
                 
-                <div class="flex flex-row gap-3 md:gap-10 justify-center items-center">
+                <div class="flex flex-row gap-3 md:gap-10 justify-center items-center mb-8">
                     
                     <!-- Date: 31 -->
                     <div class="scratch-circle relative group">
@@ -370,8 +372,8 @@
                 </div>
             </div>
 
-            <!-- 2. Countdown Timer - Moved to be after Reveal the Date -->
-            <div class="w-full flex flex-col items-center reveal relative z-10">
+            <!-- 2. Countdown Timer (Hidden until Scratch) -->
+            <div id="countdown-section" class="w-full flex-col items-center relative z-10 hidden opacity-0 transition-opacity duration-1000">
                 <h2 class="font-cinzel text-lg md:text-2xl text-gold tracking-[0.2em] mb-6 drop-shadow-md">Time Remaining</h2>
                 <div class="grid grid-cols-4 gap-3 md:gap-6 max-w-lg mx-auto font-montserrat w-full px-2 md:px-4">
                     <div class="flex flex-col items-center bg-black/40 p-3 md:p-5 rounded-xl border border-white/10 backdrop-blur-sm shadow-xl">
@@ -660,6 +662,18 @@
 
                     if (totalRevealed === canvases.length) {
                         fireConfetti();
+                        
+                        // Reveal the countdown section
+                        const countdownSection = document.getElementById('countdown-section');
+                        if (countdownSection) {
+                            countdownSection.classList.remove('hidden');
+                            countdownSection.classList.add('flex');
+                            
+                            // Small delay ensures display:flex applies before opacity transition
+                            setTimeout(() => {
+                                countdownSection.classList.remove('opacity-0');
+                            }, 50);
+                        }
                     }
                 };
 
