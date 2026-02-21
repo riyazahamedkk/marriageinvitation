@@ -200,7 +200,9 @@
             justify-content: center;
             opacity: 0;
             transition: opacity 1.2s ease-in 0.8s;
-            padding: 1rem;
+            padding: 1.5rem;
+            width: 100%;
+            height: 100%;
         }
 
         .curtain-wrapper.is-open .curtain-content {
@@ -316,13 +318,13 @@
                     <img src="image_979c79.png" alt="Tap to view" class="tap-icon-img" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'60\' height=\'60\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'white\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'><path d=\'M18 11V6a2 2 0 0 0-4 0v4\'/><path d=\'M14 10V5a2 2 0 0 0-4 0v5\'/><path d=\'M10 10.5V4a2 2 0 0 0-4 0v9.5\'/><path d=\'M6 14v-1.5a2 2 0 0 0-4 0V16c0 4.4 3.6 8 8 8h3.3a2 2 0 0 0 1.9-1.3l2.6-7.8c.4-1.2-.4-2.5-1.7-2.7h-4.2l.6-1.2Z\'/></svg>'">
                 </div>
 
-                <!-- Hidden Content behind curtains -->
+                <!-- Hidden Content behind curtains with adjusted text sizes so it won't overflow/hide -->
                 <div class="curtain-content">
-                    <h1 class="font-cursive text-[2.75rem] leading-[1.1] md:text-7xl lg:text-8xl text-red-950 font-medium tracking-wide drop-shadow-sm w-full px-4">
-                        Abdul Sathar<br/><span class="text-4xl md:text-6xl lg:text-7xl">Moomeen</span>
+                    <h1 class="font-cursive text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-red-950 font-medium tracking-wide drop-shadow-sm leading-tight w-full px-2 md:px-4">
+                        Abdul Sathar<br/>Moomeen
                     </h1>
-                    <span class="font-cormorant text-xl md:text-4xl text-yellow-600 my-2 md:my-4">&amp;</span>
-                    <h1 class="font-cursive text-5xl md:text-7xl lg:text-8xl text-red-950 font-medium tracking-wide drop-shadow-sm leading-tight w-full px-4">
+                    <span class="font-cormorant text-xl md:text-3xl text-yellow-600 my-2 md:my-4">&amp;</span>
+                    <h1 class="font-cursive text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-red-950 font-medium tracking-wide drop-shadow-sm leading-tight w-full px-2 md:px-4">
                         Rukzana Fathima
                     </h1>
                 </div>
@@ -338,33 +340,10 @@
             <div class="w-24 h-px bg-gold/50 mx-auto mt-8 mb-4"></div>
         </div>
 
-        <!-- Layout for Countdown, Date, Location, Lunch with even spacing -->
+        <!-- Layout for Date, Countdown, Location, Lunch with even spacing -->
         <div class="flex flex-col gap-16 md:gap-24 items-center w-full max-w-5xl my-10">
             
-            <!-- 0. Countdown Timer -->
-            <div class="w-full flex flex-col items-center reveal relative z-10">
-                <h2 class="font-cinzel text-lg md:text-2xl text-gold tracking-[0.2em] mb-6 drop-shadow-md">Time Remaining</h2>
-                <div class="grid grid-cols-4 gap-3 md:gap-6 max-w-lg mx-auto font-montserrat w-full px-2 md:px-4">
-                    <div class="flex flex-col items-center bg-black/40 p-3 md:p-5 rounded-xl border border-white/10 backdrop-blur-sm shadow-xl">
-                        <span id="days" class="text-xl md:text-4xl font-light text-white tabular-nums">00</span>
-                        <span class="text-[9px] md:text-xs tracking-widest text-gold mt-2 uppercase font-medium">Days</span>
-                    </div>
-                    <div class="flex flex-col items-center bg-black/40 p-3 md:p-5 rounded-xl border border-white/10 backdrop-blur-sm shadow-xl">
-                        <span id="hours" class="text-xl md:text-4xl font-light text-white tabular-nums">00</span>
-                        <span class="text-[9px] md:text-xs tracking-widest text-gold mt-2 uppercase font-medium">Hours</span>
-                    </div>
-                    <div class="flex flex-col items-center bg-black/40 p-3 md:p-5 rounded-xl border border-white/10 backdrop-blur-sm shadow-xl">
-                        <span id="minutes" class="text-xl md:text-4xl font-light text-white tabular-nums">00</span>
-                        <span class="text-[9px] md:text-xs tracking-widest text-gold mt-2 uppercase font-medium">Mins</span>
-                    </div>
-                    <div class="flex flex-col items-center bg-black/40 p-3 md:p-5 rounded-xl border border-white/10 backdrop-blur-sm shadow-xl">
-                        <span id="seconds" class="text-xl md:text-4xl font-light text-white tabular-nums">00</span>
-                        <span class="text-[9px] md:text-xs tracking-widest text-gold mt-2 uppercase font-medium">Secs</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 1. The Date (Scratch Reveal) -->
+            <!-- 1. The Date (Scratch Reveal) - Moved to be first -->
             <div class="w-full flex flex-col items-center reveal relative z-10">
                 <h2 class="font-cinzel text-xl md:text-3xl text-gold tracking-[0.25em] mb-4 drop-shadow-md">Reveal the Date</h2>
                 <p class="font-montserrat text-[10px] md:text-sm tracking-widest text-gray-400 mb-10 uppercase">Scratch all three circles to continue</p>
@@ -391,7 +370,30 @@
                 </div>
             </div>
 
-            <!-- 2. The Ceremony (Location) -->
+            <!-- 2. Countdown Timer - Moved to be after Reveal the Date -->
+            <div class="w-full flex flex-col items-center reveal relative z-10">
+                <h2 class="font-cinzel text-lg md:text-2xl text-gold tracking-[0.2em] mb-6 drop-shadow-md">Time Remaining</h2>
+                <div class="grid grid-cols-4 gap-3 md:gap-6 max-w-lg mx-auto font-montserrat w-full px-2 md:px-4">
+                    <div class="flex flex-col items-center bg-black/40 p-3 md:p-5 rounded-xl border border-white/10 backdrop-blur-sm shadow-xl">
+                        <span id="days" class="text-xl md:text-4xl font-light text-white tabular-nums">00</span>
+                        <span class="text-[9px] md:text-xs tracking-widest text-gold mt-2 uppercase font-medium">Days</span>
+                    </div>
+                    <div class="flex flex-col items-center bg-black/40 p-3 md:p-5 rounded-xl border border-white/10 backdrop-blur-sm shadow-xl">
+                        <span id="hours" class="text-xl md:text-4xl font-light text-white tabular-nums">00</span>
+                        <span class="text-[9px] md:text-xs tracking-widest text-gold mt-2 uppercase font-medium">Hours</span>
+                    </div>
+                    <div class="flex flex-col items-center bg-black/40 p-3 md:p-5 rounded-xl border border-white/10 backdrop-blur-sm shadow-xl">
+                        <span id="minutes" class="text-xl md:text-4xl font-light text-white tabular-nums">00</span>
+                        <span class="text-[9px] md:text-xs tracking-widest text-gold mt-2 uppercase font-medium">Mins</span>
+                    </div>
+                    <div class="flex flex-col items-center bg-black/40 p-3 md:p-5 rounded-xl border border-white/10 backdrop-blur-sm shadow-xl">
+                        <span id="seconds" class="text-xl md:text-4xl font-light text-white tabular-nums">00</span>
+                        <span class="text-[9px] md:text-xs tracking-widest text-gold mt-2 uppercase font-medium">Secs</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. The Ceremony (Location) -->
             <div class="w-full reveal relative z-10 px-4 md:px-0">
                 <div class="glass-card bg-topo p-8 md:p-12 rounded-3xl w-full flex flex-col md:flex-row items-center justify-between text-left shadow-2xl relative overflow-hidden group border-t border-white/10">
                     <div class="absolute inset-0 bg-gradient-to-r from-galaxy-800/80 to-transparent"></div>
@@ -426,7 +428,7 @@
                 </div>
             </div>
 
-            <!-- 3. The Feast (Lunch) -->
+            <!-- 4. The Feast (Lunch) -->
             <div class="w-full reveal relative z-10 px-4 md:px-0">
                 <div class="glass-card bg-topo p-8 md:p-12 rounded-3xl w-full flex flex-col md:flex-row items-center justify-between text-left shadow-2xl relative overflow-hidden group border-t border-white/10">
                     <div class="absolute inset-0 bg-gradient-to-r from-galaxy-800/80 to-transparent"></div>
