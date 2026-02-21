@@ -2,579 +2,275 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Abdul Sathar & Rukzana | Wedding Invitation</title>
-    
-    <!-- Tailwind CSS -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Premium Scratch Reveal</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-
-    <!-- Canvas Confetti for the Reveal Effect -->
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-
-    <!-- Custom Configuration and Styling -->
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        gold: '#e4c86e',
-                        space: {
-                            950: '#050b14', /* Deep space black/blue */
-                            900: '#0a1128',
-                            800: '#141e3c',
-                            100: '#e1e9f4',
-                            50: '#f0f4fa',
-                        }
-                    },
-                    fontFamily: {
-                        cinzel: ['Cinzel', 'serif'],
-                        cursive: ['Great Vibes', 'cursive'], /* New Cursive Font */
-                        montserrat: ['Montserrat', 'sans-serif'],
-                    }
-                }
-            }
-        }
-    </script>
-
     <style>
-        /* Imported Great Vibes for cursive, along with existing fonts */
-        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Great+Vibes&family=Montserrat:wght@300;400;500;600&display=swap');
-
+        /* Custom Animations and Styling */
         body {
-            background-color: #050b14;
-            color: #f0f4fa;
-            overflow-x: hidden;
-            font-family: 'Montserrat', sans-serif;
-        }
-
-        ::selection {
-            background-color: #ca8a04;
+            background-color: #0f172a;
             color: white;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            overflow-x: hidden;
         }
 
-        /* --- Galaxy Stars Particles --- */
-        #particles-container {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            overflow: hidden;
-            z-index: 0;
-            pointer-events: none;
-        }
-        
-        .star {
+        /* Animated Background Blobs */
+        .blob {
             position: absolute;
-            background-color: #ffffff;
-            border-radius: 50%;
-            animation: twinkle infinite alternate ease-in-out;
-        }
-
-        @keyframes twinkle {
-            0% { opacity: 0.2; transform: scale(0.8); }
-            100% { opacity: 1; transform: scale(1.2); box-shadow: 0 0 6px rgba(255, 255, 255, 0.8); }
-        }
-
-        /* --- Glassmorphism --- */
-        .glass-card {
-            background: rgba(10, 17, 40, 0.4);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(228, 200, 110, 0.15);
-        }
-
-        /* --- Scroll Reveal Animation --- */
-        .reveal {
-            opacity: 0;
-            transform: translateY(3rem) scale(0.95);
-            transition: all 1s ease-out;
-        }
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-        }
-
-        /* --- Advanced Venue Card Styles --- */
-        .venue-tilt {
-            transform-style: preserve-3d;
-            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        }
-        .venue-inner {
-            transform: translateZ(0);
-            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        }
-        
-        /* Subtle star-map background for venue cards */
-        .bg-starmap {
-            background-image: radial-gradient(rgba(228, 200, 110, 0.1) 1px, transparent 1px);
-            background-size: 20px 20px;
-        }
-
-        /* Animated Radar Ping */
-        @keyframes radar-pulse {
-            0% { transform: scale(1); opacity: 0.8; }
-            100% { transform: scale(2.5); opacity: 0; }
-        }
-        .radar-ping::before {
-            content: '';
-            position: absolute;
-            width: 100%; height: 100%;
-            background-color: #e4c86e;
-            border-radius: 50%;
+            filter: blur(80px);
             z-index: -1;
-            animation: radar-pulse 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+            opacity: 0.6;
+            animation: float 10s infinite ease-in-out alternate;
         }
-        
-        /* Premium Button Style */
-        .btn-premium {
-            background: linear-gradient(135deg, #e4c86e 0%, #b38728 100%);
-            box-shadow: 0 4px 15px rgba(228, 200, 110, 0.2);
-            transition: all 0.3s ease;
+        .blob-1 { top: 10%; left: 10%; width: 300px; height: 300px; background: #8b5cf6; animation-delay: 0s; }
+        .blob-2 { bottom: 10%; right: 10%; width: 400px; height: 400px; background: #ec4899; animation-delay: -5s; }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(30px, 50px) scale(1.1); }
         }
-        .btn-premium:hover {
-            box-shadow: 0 6px 20px rgba(228, 200, 110, 0.4);
-            transform: translateY(-2px);
+
+        /* The Scratch Card Container */
+        .card-container {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            height: 250px;
+            border-radius: 1.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            overflow: hidden;
+            margin: 0 auto;
+        }
+
+        /* The Revealed Content (Hidden beneath canvas initially) */
+        .reveal-content {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.5;
+            transform: scale(0.95);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Animation when canvas is fully scratched */
+        .reveal-content.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* The Canvas Layer */
+        #scratch-canvas {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            cursor: pointer;
+            /* CRITICAL: This allows page scrolling outside the canvas, but prevents it inside */
+            touch-action: none; 
+            transition: opacity 0.5s ease-out;
+        }
+
+        /* Glowing text effect for the revealed name */
+        .text-glow {
+            text-shadow: 0 0 20px rgba(236, 72, 153, 0.5);
+            background: linear-gradient(to right, #f472b6, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
     </style>
 </head>
-<body class="relative min-h-screen selection:bg-yellow-600 selection:text-white">
+<body class="antialiased min-h-[150vh] relative flex flex-col items-center">
 
-    <!-- Background Layers -->
-    <div class="fixed inset-0 z-0 bg-gradient-to-b from-space-950 via-space-900 to-space-950 pointer-events-none"></div>
-    
-    <!-- CSS Crescent Moon -->
-    <div class="absolute top-20 right-10 md:top-32 md:right-32 w-24 h-24 md:w-40 md:h-40 rounded-full shadow-[inset_-12px_-12px_0_0_#e4c86e] md:shadow-[inset_-18px_-18px_0_0_#e4c86e] opacity-80 blur-[1px] z-0 transform rotate-12 pointer-events-none"></div>
-    
-    <!-- Stars Container -->
-    <div id="particles-container"></div>
+    <!-- Ambient Background -->
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
 
-    <!-- Main Content -->
-    <div class="relative z-10 container mx-auto px-4 py-16 flex flex-col items-center justify-center min-h-screen text-center">
+    <!-- Top spacing to demonstrate scrolling works -->
+    <div class="w-full text-center py-20 px-6">
+        <h1 class="text-4xl font-extrabold tracking-tight text-white mb-4">Welcome</h1>
+        <p class="text-slate-400">Scroll down to find your secret card.</p>
+        <p class="text-slate-500 text-sm mt-2">(The page will scroll smoothly without getting stuck)</p>
+    </div>
+
+    <!-- Main Card Area -->
+    <div class="w-full px-6 py-20 flex justify-center">
         
-        <!-- Hero Section -->
-        <div class="w-full flex flex-col items-center reveal" style="transition-delay: 100ms;">
-            <div class="mb-6 font-cinzel font-semibold text-xl md:text-2xl text-gold drop-shadow-md tracking-widest">
-                بِسْمِ ٱللَّٰهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ
-            </div>
-            <p class="font-montserrat text-xs md:text-sm tracking-[0.2em] md:tracking-[0.3em] uppercase text-space-100/80 mb-8 font-light">
-                We cordially invite you to celebrate the wedding of
-            </p>
-        </div>
-
-        <!-- The Couple (Heart Scratch Reveal Effect) -->
-        <div class="w-full reveal" style="transition-delay: 300ms;">
-            <div id="scratch-container" class="relative w-full max-w-5xl mx-auto my-8 touch-none select-none rounded-2xl p-6 md:p-12">
-                
-                <!-- Hidden Names (Single Line format, Cursive & Italics) -->
-                <div id="hidden-names" class="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8 w-full py-8 opacity-10 pointer-events-none transition-opacity duration-1000">
-                    <h1 class="font-cursive italic text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-gold font-medium tracking-wide drop-shadow-lg leading-tight whitespace-nowrap">
-                        Abdul Sathar
-                    </h1>
-                    
-                    <div class="flex-shrink-0 flex justify-center py-2 md:py-0">
-                        <i data-lucide="heart" class="w-8 h-8 md:w-12 md:h-12 text-gold fill-gold animate-pulse drop-shadow-[0_0_15px_rgba(228,200,110,0.6)]"></i>
-                    </div>
-
-                    <h1 class="font-cursive italic text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-gold font-medium tracking-wide drop-shadow-lg leading-tight whitespace-nowrap">
-                        Rukzana Fathima
-                    </h1>
-                </div>
-
-                <!-- Canvas Overlay -->
-                <canvas id="scratch-canvas" class="absolute top-0 left-0 w-full h-full cursor-pointer transition-opacity duration-[1500ms] shadow-[0_0_30px_rgba(228,200,110,0.15)] rounded-2xl"></canvas>
-            </div>
-        </div>
-
-        <!-- Invitation Text -->
-        <div class="w-full max-w-2xl my-12 px-6 reveal" style="transition-delay: 500ms;">
-            <p class="font-montserrat text-sm md:text-base text-space-100/90 leading-loose font-light tracking-wide">
-                With the blessings of Allah (SWT),<br />
-                we are pleased to invite you to our Nikah ceremony on May 31, 2026.
-                <br /><br />
-                We request the honor of your presence and duas as we begin this beautiful journey together in the name of Allah.
-            </p>
-            <div class="w-24 h-px bg-gold/50 mx-auto mt-10"></div>
-        </div>
-
-        <!-- Save the Date & Countdown -->
-        <!-- Note: mb-12 used here to match gap-12 in the grid below for perfectly even spacing -->
-        <div class="w-full max-w-3xl mb-12 glass-card p-8 md:p-12 rounded-[2rem] relative overflow-hidden group shadow-2xl reveal" style="transition-delay: 700ms;">
-            <div class="absolute inset-0 bg-gradient-to-br from-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+        <div class="card-container group">
             
-            <h2 class="font-cinzel text-xl md:text-3xl text-space-50 tracking-[0.25em] mb-6 drop-shadow-md">SAVE THE DATE</h2>
-            
-            <div class="flex items-center justify-center gap-4 mb-10">
-                <div class="h-[1px] w-12 bg-gold/50 hidden md:block"></div>
-                <p class="font-montserrat text-lg md:text-2xl text-gold font-medium tracking-widest drop-shadow-md">
-                    SUNDAY, MAY 31, 2026
-                </p>
-                <div class="h-[1px] w-12 bg-gold/50 hidden md:block"></div>
+            <!-- BOTTOM LAYER: The Revealed Full Name -->
+            <div id="reveal-content" class="reveal-content">
+                <span class="text-slate-300 text-sm font-medium tracking-widest uppercase mb-2">Congratulations</span>
+                <h2 class="text-4xl font-black text-glow text-center px-4 leading-tight">
+                    <!-- PUT YOUR FULL NAME HERE -->
+                    ALEXANDER PIERCE
+                </h2>
+                <div class="mt-4 w-12 h-1 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full"></div>
             </div>
 
-            <div class="grid grid-cols-4 gap-4 md:gap-8 max-w-lg mx-auto font-montserrat relative z-10">
-                <div class="flex flex-col items-center bg-space-950/60 p-3 md:p-4 rounded-xl border border-gold/20">
-                    <span id="days" class="text-2xl md:text-4xl font-light text-space-50 tabular-nums">00</span>
-                    <span class="text-[9px] md:text-xs tracking-widest text-gold mt-2 uppercase font-medium">DAYS</span>
-                </div>
-                <div class="flex flex-col items-center bg-space-950/60 p-3 md:p-4 rounded-xl border border-gold/20">
-                    <span id="hours" class="text-2xl md:text-4xl font-light text-space-50 tabular-nums">00</span>
-                    <span class="text-[9px] md:text-xs tracking-widest text-gold mt-2 uppercase font-medium">HOURS</span>
-                </div>
-                <div class="flex flex-col items-center bg-space-950/60 p-3 md:p-4 rounded-xl border border-gold/20">
-                    <span id="minutes" class="text-2xl md:text-4xl font-light text-space-50 tabular-nums">00</span>
-                    <span class="text-[9px] md:text-xs tracking-widest text-gold mt-2 uppercase font-medium">MINS</span>
-                </div>
-                <div class="flex flex-col items-center bg-space-950/60 p-3 md:p-4 rounded-xl border border-gold/20">
-                    <span id="seconds" class="text-2xl md:text-4xl font-light text-space-50 tabular-nums">00</span>
-                    <span class="text-[9px] md:text-xs tracking-widest text-gold mt-2 uppercase font-medium">SECS</span>
-                </div>
-            </div>
-        </div>
+            <!-- TOP LAYER: The Scratchable Canvas -->
+            <canvas id="scratch-canvas"></canvas>
 
-        <!-- Advanced Venues Section (Even gap-12 spacing to match the mb-12 above) -->
-        <div class="w-full max-w-6xl grid grid-cols-1 md:grid-cols-2 gap-12 mb-24 relative perspective-[1000px]">
-            
-            <!-- Nikah Ceremony Card -->
-            <div class="venue-tilt h-full reveal" style="transition-delay: 200ms;">
-                <div class="glass-card bg-starmap p-8 md:p-12 rounded-3xl h-full flex flex-col items-center text-center shadow-2xl relative overflow-hidden group">
-                    <div class="absolute inset-0 bg-gradient-to-t from-space-950/90 to-transparent"></div>
-                    
-                    <div class="venue-inner relative z-10 flex flex-col h-full items-center w-full">
-                        <div class="relative w-20 h-20 rounded-full bg-space-950/80 border border-gold flex items-center justify-center mb-8 shadow-[0_0_20px_rgba(228,200,110,0.2)] radar-ping">
-                            <i data-lucide="map-pin" class="text-gold w-10 h-10"></i>
-                        </div>
-                        
-                        <h3 class="font-cinzel text-xl md:text-2xl text-gold mb-4 tracking-widest">The Ceremony</h3>
-                        
-                        <div class="flex items-center justify-center gap-2 text-space-200 mb-6 font-montserrat text-sm bg-space-950/60 px-5 py-2 rounded-full border border-space-800/80 backdrop-blur-sm">
-                            <i data-lucide="clock" class="w-4 h-4"></i>
-                            <span class="tracking-wide">11:00 AM</span>
-                        </div>
-                        
-                        <h4 class="font-cinzel text-2xl md:text-3xl text-space-50 mb-4 font-medium leading-tight">
-                            Vadakku Adhi Mohideen<br/>Jumma Mosque
-                        </h4>
-                        
-                        <p class="font-montserrat text-sm text-space-200/70 leading-relaxed font-light mb-10 max-w-[250px]">
-                            Gnaniarappa Peria Street,<br/>
-                            Melapalayam, Tirunelveli
-                        </p>
-                        
-                        <div class="mt-auto pt-4">
-                            <a href="https://www.google.com/maps/dir/?api=1&destination=8.6963411,77.7082719" target="_blank" rel="noopener noreferrer" class="btn-premium relative inline-flex items-center justify-center px-8 py-3.5 overflow-hidden font-montserrat text-sm font-semibold text-[#050b14] rounded-full group">
-                                <span class="absolute w-0 h-0 transition-all duration-500 ease-out bg-white rounded-full group-hover:w-56 group-hover:h-56 opacity-20"></span>
-                                <span class="relative flex items-center gap-2 tracking-wide uppercase">
-                                    <i data-lucide="navigation" class="w-4 h-4"></i> Get Directions
-                                </span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Reception Feast Card -->
-            <div class="venue-tilt h-full reveal" style="transition-delay: 400ms;">
-                <div class="glass-card bg-starmap p-8 md:p-12 rounded-3xl h-full flex flex-col items-center text-center shadow-2xl relative overflow-hidden group">
-                    <div class="absolute inset-0 bg-gradient-to-t from-space-950/90 to-transparent"></div>
-                    
-                    <div class="venue-inner relative z-10 flex flex-col h-full items-center w-full">
-                        <div class="relative w-20 h-20 rounded-full bg-space-950/80 border border-gold flex items-center justify-center mb-8 shadow-[0_0_20px_rgba(228,200,110,0.2)] radar-ping">
-                            <i data-lucide="utensils" class="text-gold w-10 h-10"></i>
-                        </div>
-                        
-                        <h3 class="font-cinzel text-xl md:text-2xl text-gold mb-4 tracking-widest">The Feast</h3>
-                        
-                        <div class="flex items-center justify-center gap-2 text-space-200 mb-6 font-montserrat text-sm bg-space-950/60 px-5 py-2 rounded-full border border-space-800/80 backdrop-blur-sm">
-                            <i data-lucide="calendar-heart" class="w-4 h-4"></i>
-                            <span class="tracking-wide">Following Ceremony</span>
-                        </div>
-                        
-                        <h4 class="font-cinzel text-2xl md:text-3xl text-space-50 mb-4 font-medium leading-tight">
-                            K.S. Mahal
-                        </h4>
-                        
-                        <p class="font-montserrat text-sm text-space-200/70 leading-relaxed font-light mb-10 max-w-[250px]">
-                            Fathima Nagar,<br/>
-                            Melapalayam, Tirunelveli
-                        </p>
-                        
-                        <div class="mt-auto pt-4">
-                            <a href="https://www.google.com/maps/dir/?api=1&destination=8.6841115,77.7200873" target="_blank" rel="noopener noreferrer" class="btn-premium relative inline-flex items-center justify-center px-8 py-3.5 overflow-hidden font-montserrat text-sm font-semibold text-[#050b14] rounded-full group">
-                                <span class="absolute w-0 h-0 transition-all duration-500 ease-out bg-white rounded-full group-hover:w-56 group-hover:h-56 opacity-20"></span>
-                                <span class="relative flex items-center gap-2 tracking-wide uppercase">
-                                    <i data-lucide="navigation" class="w-4 h-4"></i> Get Directions
-                                </span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-        <!-- Footer -->
-        <div class="w-full flex flex-col items-center pb-12 reveal" style="transition-delay: 300ms;">
-            <div class="w-12 h-px bg-gold mb-8 opacity-50"></div>
-            <p class="font-cinzel text-lg md:text-xl text-space-100 italic mb-2 tracking-wide">
-                "And We created you in pairs"
-            </p>
-            <p class="font-montserrat text-xs text-gold/80 mb-6">
-                (Quran 78:8)
-            </p>
-            <p class="font-montserrat text-[10px] md:text-xs tracking-[0.3em] text-space-200/50 uppercase font-semibold">
-                We eagerly await your presence
-            </p>
         </div>
 
     </div>
 
-    <!-- JavaScript Logic -->
+    <!-- Bottom spacing to demonstrate scrolling works -->
+    <div class="w-full text-center py-32 px-6 text-slate-500">
+        <p>End of page. Smooth scrolling maintained!</p>
+    </div>
+
     <script>
-        // Initialize Icons
-        lucide.createIcons();
-
-        // --- 1. Generate Galaxy Stars Background Particles ---
-        const particleContainer = document.getElementById('particles-container');
-        for (let i = 0; i < 150; i++) {
-            const particle = document.createElement('div');
-            particle.className = 'star';
+        document.addEventListener('DOMContentLoaded', () => {
+            const canvas = document.getElementById('scratch-canvas');
+            const ctx = canvas.getContext('2d', { willReadFrequently: false }); // Optimized for speed
+            const revealContent = document.getElementById('reveal-content');
             
-            // Random positioning and styling
-            particle.style.left = `${Math.random() * 100}%`;
-            particle.style.top = `${Math.random() * 100}%`;
+            let isDrawing = false;
+            let scratchCount = 0;
+            let isRevealed = false;
             
-            // Varied star sizes
-            const size = Math.random() * 2.5 + 0.5;
-            particle.style.width = `${size}px`;
-            particle.style.height = `${size}px`;
+            // CONFIGURATION
+            const BRUSH_SIZE = 60; // Extra large brush for minimal scratch effort
+            const SCRATCHES_TO_REVEAL = 25; // How many quick swipes until auto-reveal
             
-            // Varied twinkling speeds
-            particle.style.animationDelay = `${Math.random() * 5}s`;
-            particle.style.animationDuration = `${Math.random() * 3 + 1.5}s`;
-            
-            // Some stars are slightly golden/blue
-            const colors = ['#ffffff', '#ffffff', '#e4c86e', '#e1e9f4'];
-            particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-            
-            particleContainer.appendChild(particle);
-        }
-
-        // --- 2. Scroll Reveal Observer ---
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-        // --- 3. 3D Tilt Effect on Venue Cards ---
-        const tiltCards = document.querySelectorAll('.venue-tilt');
-        tiltCards.forEach(card => {
-            const inner = card.querySelector('.venue-inner');
-            
-            card.addEventListener('mousemove', (e) => {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
-                
-                const rotateX = ((y - centerY) / centerY) * -10;
-                const rotateY = ((x - centerX) / centerX) * 10;
-                
-                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
-                
-                if(inner) {
-                    inner.style.transform = `translateZ(30px)`;
-                }
-            });
-            
-            card.addEventListener('mouseleave', () => {
-                card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
-                if(inner) {
-                    inner.style.transform = `translateZ(0px)`;
-                }
-            });
-        });
-
-        // --- 4. Countdown Timer ---
-        const targetDate = new Date("May 31, 2026 11:00:00").getTime();
-        const dEl = document.getElementById('days');
-        const hEl = document.getElementById('hours');
-        const mEl = document.getElementById('minutes');
-        const sEl = document.getElementById('seconds');
-
-        const updateCountdown = setInterval(() => {
-            const now = new Date().getTime();
-            const distance = targetDate - now;
-
-            if (distance < 0) {
-                clearInterval(updateCountdown);
-                return;
+            // Set actual canvas resolution to match its CSS size to prevent blurring
+            function resizeCanvas() {
+                canvas.width = canvas.offsetWidth;
+                canvas.height = canvas.offsetHeight;
+                fillCanvas();
             }
 
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            dEl.innerText = String(days).padStart(2, '0');
-            hEl.innerText = String(hours).padStart(2, '0');
-            mEl.innerText = String(minutes).padStart(2, '0');
-            sEl.innerText = String(seconds).padStart(2, '0');
-        }, 1000);
-
-        // --- 5. Heart Scratch Canvas Logic & Confetti ---
-        const initScratchCard = () => {
-            const canvas = document.getElementById('scratch-canvas');
-            const container = document.getElementById('scratch-container');
-            const hiddenNames = document.getElementById('hidden-names');
-            
-            if (!canvas || !container) return;
-            
-            const ctx = canvas.getContext('2d');
-            let isDrawing = false;
-            let isRevealed = false;
-            let scratchCount = 0;
-
-            const resizeCanvas = () => {
-                if (isRevealed) return;
-                canvas.width = container.offsetWidth;
-                canvas.height = container.offsetHeight;
-
-                // Create Premium Gold Gradient Canvas Cover
+            // Draw the premium metallic/gradient cover
+            function fillCanvas() {
+                if (isRevealed) return; // Don't redraw if already scratched
+                
+                // Create a beautiful vibrant gradient cover
                 const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-                gradient.addColorStop(0, '#bf953f');
-                gradient.addColorStop(0.25, '#fcf6ba');
-                gradient.addColorStop(0.5, '#b38728');
-                gradient.addColorStop(0.75, '#fbf5b7');
-                gradient.addColorStop(1, '#aa771c');
+                gradient.addColorStop(0, '#1e293b'); // dark slate
+                gradient.addColorStop(0.5, '#334155'); // lighter slate
+                gradient.addColorStop(1, '#0f172a'); // very dark slate
                 
                 ctx.fillStyle = gradient;
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-                // Draw Instructions and Heart Symbol
+                // Add diagonal overlay pattern
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+                ctx.lineWidth = 2;
+                for (let i = -canvas.width; i < canvas.width * 2; i += 20) {
+                    ctx.beginPath();
+                    ctx.moveTo(i, 0);
+                    ctx.lineTo(i + canvas.height, canvas.height);
+                    ctx.stroke();
+                }
+
+                // Add "Scratch to Reveal" text in the center
+                ctx.font = 'bold 22px system-ui, -apple-system, sans-serif';
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
                 
-                // Heart graphic
-                ctx.font = '50px Arial';
-                ctx.fillText('❤️', canvas.width / 2, canvas.height / 2 - 20);
-
-                // Scratch Text
-                ctx.font = '600 18px "Montserrat", sans-serif';
-                ctx.fillStyle = '#050b14'; // Dark space color for text
-                ctx.fillText('SCRATCH TO REVEAL', canvas.width / 2, canvas.height / 2 + 35);
-            };
-
-            resizeCanvas();
-            window.addEventListener('resize', resizeCanvas);
-
-            const scratch = (x, y) => {
-                ctx.globalCompositeOperation = 'destination-out';
-                const brushGradient = ctx.createRadialGradient(x, y, 0, x, y, 40);
-                brushGradient.addColorStop(0, 'rgba(0,0,0,1)');
-                brushGradient.addColorStop(1, 'rgba(0,0,0,0)');
+                // Add a subtle shadow to text
+                ctx.shadowColor = 'rgba(0,0,0,0.5)';
+                ctx.shadowBlur = 10;
+                ctx.shadowOffsetX = 0;
+                ctx.shadowOffsetY = 2;
                 
-                ctx.fillStyle = brushGradient;
-                ctx.beginPath();
-                ctx.arc(x, y, 40, 0, Math.PI * 2);
-                ctx.fill();
-            };
+                ctx.fillText('✨ Scratch to Reveal', canvas.width / 2, canvas.height / 2);
+                
+                // Reset shadow for erasing
+                ctx.shadowColor = 'transparent';
+                ctx.shadowBlur = 0;
+                
+                // Prepare for erasing
+                ctx.globalCompositeOperation = 'destination-out';
+            }
 
-            const getCoordinates = (e) => {
+            // Get exact mouse/touch position relative to canvas
+            function getPosition(e) {
                 const rect = canvas.getBoundingClientRect();
-                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-                const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+                let clientX = e.clientX;
+                let clientY = e.clientY;
+
+                if (e.touches && e.touches.length > 0) {
+                    clientX = e.touches[0].clientX;
+                    clientY = e.touches[0].clientY;
+                }
+
                 return {
                     x: clientX - rect.left,
                     y: clientY - rect.top
                 };
-            };
+            }
 
-            const handleStart = (e) => {
+            function startInteraction(e) {
                 if (isRevealed) return;
                 isDrawing = true;
-                const { x, y } = getCoordinates(e);
-                scratch(x, y);
-                e.preventDefault();
-            };
+                scratch(e);
+            }
 
-            const handleMove = (e) => {
-                if (!isDrawing || isRevealed) return;
-                const { x, y } = getCoordinates(e);
-                scratch(x, y);
-                e.preventDefault();
-
-                scratchCount++;
-                if (scratchCount > 80) { // adjusted to reveal slightly earlier
-                    reveal();
-                }
-            };
-
-            const handleEnd = () => {
+            function endInteraction() {
                 isDrawing = false;
-            };
+            }
 
-            const reveal = () => {
-                isRevealed = true;
-                canvas.style.opacity = '0';
-                canvas.style.pointerEvents = 'none';
-                hiddenNames.classList.remove('opacity-10', 'pointer-events-none');
-                hiddenNames.classList.add('opacity-100');
+            function scratch(e) {
+                if (!isDrawing || isRevealed) return;
+
+                // Prevent default ONLY while actively scratching inside the canvas
+                // This stops the page from pulling-to-refresh or zooming while scratching
+                if (e.cancelable) {
+                    e.preventDefault(); 
+                }
+
+                const pos = getPosition(e);
+
+                // Erase circle
+                ctx.beginPath();
+                ctx.arc(pos.x, pos.y, BRUSH_SIZE, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Ultra-fast no-lag completion logic
+                // Instead of analyzing pixels (which causes lag), we just count movements
+                scratchCount++;
                 
-                // Trigger Confetti Celebration!
-                triggerConfetti();
-            };
+                if (scratchCount > SCRATCHES_TO_REVEAL) {
+                    revealAll();
+                }
+            }
 
-            const triggerConfetti = () => {
-                var duration = 3000;
-                var end = Date.now() + duration;
+            // Instantly clear the rest of the canvas and show content
+            function revealAll() {
+                isRevealed = true;
+                
+                // Fade out the canvas via CSS transition
+                canvas.style.opacity = '0';
+                canvas.style.pointerEvents = 'none'; // Ensure it doesn't block clicks anymore
+                
+                // Animate the text underneath (scale up and glow)
+                revealContent.classList.add('active');
+            }
 
-                (function frame() {
-                    confetti({
-                        particleCount: 5,
-                        angle: 60,
-                        spread: 55,
-                        origin: { x: 0 },
-                        colors: ['#e4c86e', '#ffffff', '#b38728']
-                    });
-                    confetti({
-                        particleCount: 5,
-                        angle: 120,
-                        spread: 55,
-                        origin: { x: 1 },
-                        colors: ['#e4c86e', '#ffffff', '#b38728']
-                    });
+            // Event Listeners for Mouse
+            canvas.addEventListener('mousedown', startInteraction);
+            canvas.addEventListener('mousemove', scratch);
+            canvas.addEventListener('mouseup', endInteraction);
+            canvas.addEventListener('mouseleave', endInteraction);
 
-                    if (Date.now() < end) {
-                        requestAnimationFrame(frame);
-                    }
-                }());
-            };
+            // Event Listeners for Touch (Mobile)
+            // passive: false is required to allow e.preventDefault() to work during scratching
+            canvas.addEventListener('touchstart', startInteraction, { passive: false });
+            canvas.addEventListener('touchmove', scratch, { passive: false });
+            canvas.addEventListener('touchend', endInteraction);
 
-            canvas.addEventListener('mousedown', handleStart);
-            canvas.addEventListener('mousemove', handleMove);
-            window.addEventListener('mouseup', handleEnd);
-            
-            canvas.addEventListener('touchstart', handleStart, {passive: false});
-            canvas.addEventListener('touchmove', handleMove, {passive: false});
-            window.addEventListener('touchend', handleEnd);
-        };
-
-        setTimeout(initScratchCard, 100);
-
+            // Initialize
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
+        });
     </script>
 </body>
 </html>
