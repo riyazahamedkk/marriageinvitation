@@ -2,275 +2,683 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Premium Scratch Reveal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abdul Sathar & Rukzana | Wedding Invitation</title>
+    
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <!-- Custom Configuration and Styling -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gold: '#e4c86e',
+                        galaxy: {
+                            900: '#060a14',
+                            800: '#0b1325',
+                            700: '#131e38',
+                        }
+                    },
+                    fontFamily: {
+                        cinzel: ['Cinzel', 'serif'],
+                        cormorant: ['Cormorant Garamond', 'serif'],
+                        montserrat: ['Montserrat', 'sans-serif'],
+                        cursive: ['Great Vibes', 'cursive'],
+                    }
+                }
+            }
+        }
+    </script>
+
     <style>
-        /* Custom Animations and Styling */
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Great+Vibes&family=Montserrat:wght@300;400;500;600&display=swap');
+
         body {
-            background-color: #0f172a;
-            color: white;
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: #060a14;
+            color: #f1f5f9; /* slate-100 */
             overflow-x: hidden;
+            font-family: 'Montserrat', sans-serif;
         }
 
-        /* Animated Background Blobs */
-        .blob {
+        ::selection {
+            background-color: #e4c86e;
+            color: #000;
+        }
+
+        /* --- Galaxy Background --- */
+        .bg-galaxy-gradient {
+            background: radial-gradient(circle at 50% 100%, #131e38 0%, #060a14 100%);
+        }
+
+        #particles-container {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            overflow: hidden;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .star {
             position: absolute;
-            filter: blur(80px);
-            z-index: -1;
-            opacity: 0.6;
-            animation: float 10s infinite ease-in-out alternate;
-        }
-        .blob-1 { top: 10%; left: 10%; width: 300px; height: 300px; background: #8b5cf6; animation-delay: 0s; }
-        .blob-2 { bottom: 10%; right: 10%; width: 400px; height: 400px; background: #ec4899; animation-delay: -5s; }
-
-        @keyframes float {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(30px, 50px) scale(1.1); }
+            background-color: #ffffff;
+            border-radius: 50%;
+            animation: twinkle infinite ease-in-out;
         }
 
-        /* The Scratch Card Container */
-        .card-container {
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.2); box-shadow: 0 0 10px #fff, 0 0 20px rgba(255, 255, 255, 0.4); }
+        }
+
+        .moon {
+            position: fixed;
+            top: 10%;
+            right: 15%;
+            width: 120px;
+            height: 120px;
+            background: radial-gradient(circle at 30% 30%, #fff 0%, #fef3c7 40%, #d97706 100%);
+            border-radius: 50%;
+            box-shadow: 0 0 80px 20px rgba(255, 243, 199, 0.3), inset -15px -15px 30px rgba(0,0,0,0.2);
+            z-index: 0;
+            opacity: 0.9;
+        }
+
+        /* Moon Craters */
+        .moon::before {
+            content: '';
+            position: absolute;
+            top: 20%; left: 40%;
+            width: 20px; height: 20px;
+            border-radius: 50%;
+            background: rgba(0,0,0,0.1);
+            box-shadow: inset 2px 2px 5px rgba(0,0,0,0.2);
+        }
+        .moon::after {
+            content: '';
+            position: absolute;
+            top: 50%; left: 20%;
+            width: 35px; height: 35px;
+            border-radius: 50%;
+            background: rgba(0,0,0,0.08);
+            box-shadow: inset 3px 3px 6px rgba(0,0,0,0.2);
+        }
+
+        /* --- Glassmorphism Cards --- */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(228, 200, 110, 0.15);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+
+        /* --- Scroll Reveal Animation --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(3rem) scale(0.95);
+            transition: all 1s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        /* --- Curtain Effect --- */
+        .curtain-wrapper {
             position: relative;
             width: 100%;
-            max-width: 400px;
-            height: 250px;
-            border-radius: 1.5rem;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(255, 255, 255, 0.1);
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            overflow: hidden;
+            max-width: 900px;
+            aspect-ratio: 16/9;
             margin: 0 auto;
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 0 50px rgba(228, 200, 110, 0.2);
+            /* Fallback background if open image fails to load */
+            background: #fff;
+            /* Main open curtain background */
+            background-image: url('images/curtain-open-C9MqdT6G.jpg');
+            background-size: 100% 100%;
+            background-position: center;
+            background-repeat: no-repeat;
         }
 
-        /* The Revealed Content (Hidden beneath canvas initially) */
-        .reveal-content {
+        .curtain-panel {
+            position: absolute;
+            top: 0;
+            width: 50%;
+            height: 100%;
+            background-color: #8b0000; /* Fallback */
+            background-image: url('images/curtain-closed-Bpkadld4.jpg');
+            background-size: 200% 100%;
+            background-repeat: no-repeat;
+            transition: transform 1.8s cubic-bezier(0.645, 0.045, 0.355, 1);
+            z-index: 20;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+        }
+
+        .curtain-left {
+            left: 0;
+            background-position: left top;
+            transform-origin: left center;
+        }
+
+        .curtain-right {
+            right: 0;
+            background-position: right top;
+            transform-origin: right center;
+        }
+
+        .curtain-wrapper.is-open .curtain-left {
+            transform: translateX(-100%);
+        }
+
+        .curtain-wrapper.is-open .curtain-right {
+            transform: translateX(100%);
+        }
+
+        .curtain-content {
             position: absolute;
             inset: 0;
+            z-index: 10;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            opacity: 0.5;
-            transform: scale(0.95);
-            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+            transition: opacity 1s ease-in 0.8s;
         }
 
-        /* Animation when canvas is fully scratched */
-        .reveal-content.active {
+        .curtain-wrapper.is-open .curtain-content {
             opacity: 1;
-            transform: scale(1);
         }
 
-        /* The Canvas Layer */
-        #scratch-canvas {
+        /* Tap Icon Pulsate */
+        .tap-indicator {
             position: absolute;
-            inset: 0;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 30;
+            cursor: pointer;
+            transition: opacity 0.5s ease;
+        }
+
+        .curtain-wrapper.is-open .tap-indicator {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .tap-icon-img {
+            width: 60px;
+            height: 60px;
+            animation: pulse-tap 2s infinite cubic-bezier(0.4, 0, 0.6, 1);
+        }
+
+        @keyframes pulse-tap {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.7; }
+        }
+
+        /* --- Scratch Circle Styling --- */
+        .scratch-circle {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.1), 0 0 20px rgba(228, 200, 110, 0.2);
+            overflow: hidden;
+            user-select: none;
+            touch-action: none;
+        }
+        @media (min-width: 768px) {
+            .scratch-circle { width: 140px; height: 140px; }
+        }
+
+        .scratch-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            z-index: 10;
             cursor: pointer;
-            /* CRITICAL: This allows page scrolling outside the canvas, but prevents it inside */
-            touch-action: none; 
-            transition: opacity 0.5s ease-out;
+            transition: opacity 0.5s ease;
+            z-index: 10;
         }
 
-        /* Glowing text effect for the revealed name */
-        .text-glow {
-            text-shadow: 0 0 20px rgba(236, 72, 153, 0.5);
-            background: linear-gradient(to right, #f472b6, #c084fc);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        /* Topographical Background for Venue Cards (Updated for Dark Theme) */
+        .bg-topo {
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.03' fill-rule='evenodd'/%3E%3C/svg%3E");
+            background-size: 80px;
+        }
+
+        .btn-premium {
+            background: linear-gradient(135deg, #e4c86e 0%, #b38728 100%);
+            box-shadow: 0 4px 15px rgba(228, 200, 110, 0.3);
+            transition: all 0.3s ease;
+        }
+        .btn-premium:hover {
+            box-shadow: 0 6px 20px rgba(228, 200, 110, 0.5);
+            transform: translateY(-2px);
         }
     </style>
 </head>
-<body class="antialiased min-h-[150vh] relative flex flex-col items-center">
+<body class="relative min-h-screen selection:bg-gold selection:text-black bg-galaxy-gradient">
 
-    <!-- Ambient Background -->
-    <div class="blob blob-1"></div>
-    <div class="blob blob-2"></div>
+    <!-- Background Layers -->
+    <div id="particles-container"></div>
+    <div class="moon"></div>
 
-    <!-- Top spacing to demonstrate scrolling works -->
-    <div class="w-full text-center py-20 px-6">
-        <h1 class="text-4xl font-extrabold tracking-tight text-white mb-4">Welcome</h1>
-        <p class="text-slate-400">Scroll down to find your secret card.</p>
-        <p class="text-slate-500 text-sm mt-2">(The page will scroll smoothly without getting stuck)</p>
-    </div>
-
-    <!-- Main Card Area -->
-    <div class="w-full px-6 py-20 flex justify-center">
+    <!-- Main Content -->
+    <div class="relative z-10 container mx-auto px-4 py-16 flex flex-col items-center min-h-screen text-center">
         
-        <div class="card-container group">
+        <!-- Hero Section / Intro -->
+        <div class="w-full flex flex-col items-center reveal mb-16" style="transition-delay: 100ms;">
+            <div class="mb-6 font-cormorant text-2xl md:text-3xl text-gold drop-shadow-md tracking-widest">
+                بِسْمِ ٱللَّٰهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ
+            </div>
+            <p class="font-montserrat text-xs md:text-sm tracking-[0.2em] md:tracking-[0.3em] uppercase text-gray-300 mb-8 font-light">
+                We cordially invite you to celebrate the wedding of
+            </p>
+        </div>
+
+        <!-- The Names (Curtain Reveal Effect) -->
+        <div class="w-full reveal mb-12" style="transition-delay: 200ms;">
+            <div id="curtain-container" class="curtain-wrapper">
+                <!-- Left and Right Curtains -->
+                <div class="curtain-panel curtain-left"></div>
+                <div class="curtain-panel curtain-right"></div>
+                
+                <!-- Tap Icon -->
+                <div class="tap-indicator" onclick="openCurtains()">
+                    <!-- Using the uploaded hand icon -->
+                    <img src="image_979c79.png" alt="Tap to view" class="tap-icon-img" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'60\' height=\'60\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'white\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'><path d=\'M18 11V6a2 2 0 0 0-4 0v4\'/><path d=\'M14 10V5a2 2 0 0 0-4 0v5\'/><path d=\'M10 10.5V4a2 2 0 0 0-4 0v9.5\'/><path d=\'M6 14v-1.5a2 2 0 0 0-4 0V16c0 4.4 3.6 8 8 8h3.3a2 2 0 0 0 1.9-1.3l2.6-7.8c.4-1.2-.4-2.5-1.7-2.7h-4.2l.6-1.2Z\'/></svg>'">
+                </div>
+
+                <!-- Hidden Content behind curtains -->
+                <div class="curtain-content">
+                    <h1 class="font-cursive text-5xl md:text-7xl lg:text-8xl text-red-950 font-medium tracking-wide drop-shadow-sm leading-tight">
+                        Abdul Sathar
+                    </h1>
+                    <span class="font-cormorant text-2xl md:text-4xl text-yellow-600 my-2">&amp;</span>
+                    <h1 class="font-cursive text-5xl md:text-7xl lg:text-8xl text-red-950 font-medium tracking-wide drop-shadow-sm leading-tight">
+                        Rukzana Fathima
+                    </h1>
+                </div>
+            </div>
+        </div>
+
+        <!-- Invitation Text -->
+        <div class="w-full max-w-2xl my-8 px-6 reveal" style="transition-delay: 300ms;">
+            <p class="font-montserrat text-sm md:text-base text-gray-300 leading-loose font-light tracking-wide">
+                With the blessings of Allah (SWT),<br />
+                we request the honor of your presence and duas as we begin this beautiful journey together.
+            </p>
+            <div class="w-24 h-px bg-gold/50 mx-auto mt-8 mb-4"></div>
+        </div>
+
+        <!-- Layout for Date, Location, Lunch with even spacing -->
+        <!-- Use gap-16 (4rem) for consistent vertical rhythm -->
+        <div class="flex flex-col gap-16 md:gap-24 items-center w-full max-w-5xl my-10">
             
-            <!-- BOTTOM LAYER: The Revealed Full Name -->
-            <div id="reveal-content" class="reveal-content">
-                <span class="text-slate-300 text-sm font-medium tracking-widest uppercase mb-2">Congratulations</span>
-                <h2 class="text-4xl font-black text-glow text-center px-4 leading-tight">
-                    <!-- PUT YOUR FULL NAME HERE -->
-                    ALEXANDER PIERCE
-                </h2>
-                <div class="mt-4 w-12 h-1 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full"></div>
+            <!-- 1. The Date (Scratch Reveal) -->
+            <div class="w-full flex flex-col items-center reveal relative z-10">
+                <h2 class="font-cinzel text-xl md:text-3xl text-gold tracking-[0.25em] mb-4 drop-shadow-md">Reveal the Date</h2>
+                <p class="font-montserrat text-xs md:text-sm tracking-widest text-gray-400 mb-10 uppercase">Scratch all three circles to continue</p>
+                
+                <div class="flex flex-row gap-4 md:gap-10 justify-center items-center">
+                    
+                    <!-- Date: 31 -->
+                    <div class="scratch-circle relative group">
+                        <span class="font-cormorant text-3xl md:text-5xl text-red-900 font-semibold absolute z-0">31</span>
+                        <canvas class="scratch-canvas" id="canvas-day"></canvas>
+                    </div>
+
+                    <!-- Month: MAY -->
+                    <div class="scratch-circle relative group">
+                        <span class="font-cormorant text-2xl md:text-4xl text-red-900 font-semibold absolute z-0">May</span>
+                        <canvas class="scratch-canvas" id="canvas-month"></canvas>
+                    </div>
+
+                    <!-- Year: 2026 -->
+                    <div class="scratch-circle relative group">
+                        <span class="font-cormorant text-2xl md:text-4xl text-red-900 font-semibold absolute z-0">2026</span>
+                        <canvas class="scratch-canvas" id="canvas-year"></canvas>
+                    </div>
+                </div>
             </div>
 
-            <!-- TOP LAYER: The Scratchable Canvas -->
-            <canvas id="scratch-canvas"></canvas>
+            <!-- 2. The Ceremony (Location) -->
+            <div class="w-full reveal relative z-10">
+                <div class="glass-card bg-topo p-8 md:p-12 rounded-3xl w-full flex flex-col md:flex-row items-center justify-between text-left shadow-2xl relative overflow-hidden group border-t border-white/10">
+                    <div class="absolute inset-0 bg-gradient-to-r from-galaxy-800/80 to-transparent"></div>
+                    
+                    <div class="relative z-10 flex flex-col mb-8 md:mb-0 w-full md:w-2/3">
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="w-12 h-12 rounded-full bg-galaxy-900/80 border border-gold flex items-center justify-center shadow-[0_0_15px_rgba(228,200,110,0.3)]">
+                                <i data-lucide="map-pin" class="text-gold w-6 h-6"></i>
+                            </div>
+                            <h3 class="font-cinzel text-xl md:text-2xl text-gold tracking-widest uppercase">The Ceremony</h3>
+                        </div>
+                        
+                        <h4 class="font-cormorant text-3xl md:text-4xl text-white mb-2 font-medium">
+                            Vadakku Adhi Mohideen Jumma Mosque
+                        </h4>
+                        
+                        <p class="font-montserrat text-sm text-gray-300 leading-relaxed font-light mb-4">
+                            Gnaniarappa Peria Street, Melapalayam, Tirunelveli
+                        </p>
+                        
+                        <div class="flex items-center gap-2 text-gray-200 font-montserrat text-sm bg-black/30 w-fit px-4 py-1.5 rounded-full border border-white/10">
+                            <i data-lucide="clock" class="w-4 h-4 text-gold"></i>
+                            <span class="tracking-wide">11:00 AM</span>
+                        </div>
+                    </div>
 
+                    <div class="relative z-10 md:ml-auto">
+                        <a href="https://www.google.com/maps/dir/?api=1&destination=8.6963411,77.7082719" target="_blank" rel="noopener noreferrer" class="btn-premium inline-flex items-center justify-center px-6 py-3 rounded-full text-[#0a261d] font-semibold text-sm tracking-wide">
+                            <i data-lucide="navigation" class="w-4 h-4 mr-2"></i> Get Directions
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. The Feast (Lunch) -->
+            <div class="w-full reveal relative z-10">
+                <div class="glass-card bg-topo p-8 md:p-12 rounded-3xl w-full flex flex-col md:flex-row items-center justify-between text-left shadow-2xl relative overflow-hidden group border-t border-white/10">
+                    <div class="absolute inset-0 bg-gradient-to-r from-galaxy-800/80 to-transparent"></div>
+                    
+                    <div class="relative z-10 flex flex-col mb-8 md:mb-0 w-full md:w-2/3">
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="w-12 h-12 rounded-full bg-galaxy-900/80 border border-gold flex items-center justify-center shadow-[0_0_15px_rgba(228,200,110,0.3)]">
+                                <i data-lucide="utensils" class="text-gold w-6 h-6"></i>
+                            </div>
+                            <h3 class="font-cinzel text-xl md:text-2xl text-gold tracking-widest uppercase">The Feast</h3>
+                        </div>
+                        
+                        <h4 class="font-cormorant text-3xl md:text-4xl text-white mb-2 font-medium">
+                            K.S. Mahal
+                        </h4>
+                        
+                        <p class="font-montserrat text-sm text-gray-300 leading-relaxed font-light mb-4">
+                            Fathima Nagar, Melapalayam, Tirunelveli
+                        </p>
+                        
+                        <div class="flex items-center gap-2 text-gray-200 font-montserrat text-sm bg-black/30 w-fit px-4 py-1.5 rounded-full border border-white/10">
+                            <i data-lucide="calendar-heart" class="w-4 h-4 text-gold"></i>
+                            <span class="tracking-wide">Following Ceremony</span>
+                        </div>
+                    </div>
+
+                    <div class="relative z-10 md:ml-auto">
+                        <a href="https://www.google.com/maps/dir/?api=1&destination=8.6841115,77.7200873" target="_blank" rel="noopener noreferrer" class="btn-premium inline-flex items-center justify-center px-6 py-3 rounded-full text-[#0a261d] font-semibold text-sm tracking-wide">
+                            <i data-lucide="navigation" class="w-4 h-4 mr-2"></i> Get Directions
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="w-full flex flex-col items-center pb-16 pt-8 reveal relative z-10" style="transition-delay: 200ms;">
+            <div class="w-12 h-px bg-gold mb-8 opacity-50"></div>
+            <p class="font-cormorant text-xl md:text-3xl text-gray-200 italic mb-2">
+                "And We created you in pairs"
+            </p>
+            <p class="font-montserrat text-xs text-gold/80 mb-6 font-medium tracking-widest">
+                [Quran 78:8]
+            </p>
+            <p class="font-montserrat text-[10px] md:text-xs tracking-[0.3em] text-gray-400 uppercase font-light">
+                We eagerly await your presence
+            </p>
         </div>
 
     </div>
 
-    <!-- Bottom spacing to demonstrate scrolling works -->
-    <div class="w-full text-center py-32 px-6 text-slate-500">
-        <p>End of page. Smooth scrolling maintained!</p>
-    </div>
-
+    <!-- JavaScript Logic -->
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const canvas = document.getElementById('scratch-canvas');
-            const ctx = canvas.getContext('2d', { willReadFrequently: false }); // Optimized for speed
-            const revealContent = document.getElementById('reveal-content');
-            
-            let isDrawing = false;
-            let scratchCount = 0;
-            let isRevealed = false;
-            
-            // CONFIGURATION
-            const BRUSH_SIZE = 60; // Extra large brush for minimal scratch effort
-            const SCRATCHES_TO_REVEAL = 25; // How many quick swipes until auto-reveal
-            
-            // Set actual canvas resolution to match its CSS size to prevent blurring
-            function resizeCanvas() {
-                canvas.width = canvas.offsetWidth;
-                canvas.height = canvas.offsetHeight;
-                fillCanvas();
-            }
+        // Initialize Icons
+        lucide.createIcons();
 
-            // Draw the premium metallic/gradient cover
-            function fillCanvas() {
-                if (isRevealed) return; // Don't redraw if already scratched
-                
-                // Create a beautiful vibrant gradient cover
-                const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-                gradient.addColorStop(0, '#1e293b'); // dark slate
-                gradient.addColorStop(0.5, '#334155'); // lighter slate
-                gradient.addColorStop(1, '#0f172a'); // very dark slate
-                
-                ctx.fillStyle = gradient;
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
+        // --- 1. Generate Galaxy Stars ---
+        const particleContainer = document.getElementById('particles-container');
+        for (let i = 0; i < 150; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            
+            // Randomize position
+            star.style.left = `${Math.random() * 100}%`;
+            star.style.top = `${Math.random() * 100}%`;
+            
+            // Randomize size (tiny stars)
+            const size = Math.random() * 2.5 + 0.5;
+            star.style.width = `${size}px`;
+            star.style.height = `${size}px`;
+            
+            // Randomize animation
+            star.style.animationDelay = `${Math.random() * 5}s`;
+            star.style.animationDuration = `${Math.random() * 4 + 3}s`;
+            
+            particleContainer.appendChild(star);
+        }
 
-                // Add diagonal overlay pattern
-                ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
-                ctx.lineWidth = 2;
-                for (let i = -canvas.width; i < canvas.width * 2; i += 20) {
+        // --- 2. Scroll Reveal Observer ---
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // --- 3. Curtain Logic ---
+        function openCurtains() {
+            const curtainContainer = document.getElementById('curtain-container');
+            curtainContainer.classList.add('is-open');
+        }
+
+        // --- 4. Scratch Canvas Logic (3 circles) ---
+        const initScratchCards = () => {
+            const canvases = [
+                document.getElementById('canvas-day'),
+                document.getElementById('canvas-month'),
+                document.getElementById('canvas-year')
+            ];
+            
+            let totalRevealed = 0;
+
+            canvases.forEach(canvas => {
+                if (!canvas) return;
+                
+                const container = canvas.parentElement;
+                const ctx = canvas.getContext('2d', { willReadFrequently: true });
+                let isDrawing = false;
+                let isRevealed = false;
+
+                const setupCanvas = () => {
+                    if (isRevealed) return;
+                    // Match CSS size exactly
+                    canvas.width = container.offsetWidth;
+                    canvas.height = container.offsetHeight;
+
+                    // Draw Gold Gradient simulating a golden scratch-off sticker
+                    const cx = canvas.width / 2;
+                    const cy = canvas.height / 2;
+                    const radius = Math.min(cx, cy);
+
+                    // Create a conic-like gradient using radial + linear techniques or multiple color stops
+                    const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+                    gradient.addColorStop(0, '#d4af37');   // Gold
+                    gradient.addColorStop(0.3, '#fff4d0'); // Light Gold highlight
+                    gradient.addColorStop(0.5, '#aa771c'); // Dark Gold
+                    gradient.addColorStop(0.7, '#fff4d0'); // Light Gold highlight
+                    gradient.addColorStop(1, '#d4af37');   // Gold
+
+                    // Draw circle
+                    ctx.fillStyle = gradient;
                     ctx.beginPath();
-                    ctx.moveTo(i, 0);
-                    ctx.lineTo(i + canvas.height, canvas.height);
+                    ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    // Optional: Inner ring to look like a coin/token
+                    ctx.strokeStyle = "rgba(255, 255, 255, 0.4)";
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    ctx.arc(cx, cy, radius - 4, 0, Math.PI * 2);
                     ctx.stroke();
-                }
-
-                // Add "Scratch to Reveal" text in the center
-                ctx.font = 'bold 22px system-ui, -apple-system, sans-serif';
-                ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                
-                // Add a subtle shadow to text
-                ctx.shadowColor = 'rgba(0,0,0,0.5)';
-                ctx.shadowBlur = 10;
-                ctx.shadowOffsetX = 0;
-                ctx.shadowOffsetY = 2;
-                
-                ctx.fillText('✨ Scratch to Reveal', canvas.width / 2, canvas.height / 2);
-                
-                // Reset shadow for erasing
-                ctx.shadowColor = 'transparent';
-                ctx.shadowBlur = 0;
-                
-                // Prepare for erasing
-                ctx.globalCompositeOperation = 'destination-out';
-            }
-
-            // Get exact mouse/touch position relative to canvas
-            function getPosition(e) {
-                const rect = canvas.getBoundingClientRect();
-                let clientX = e.clientX;
-                let clientY = e.clientY;
-
-                if (e.touches && e.touches.length > 0) {
-                    clientX = e.touches[0].clientX;
-                    clientY = e.touches[0].clientY;
-                }
-
-                return {
-                    x: clientX - rect.left,
-                    y: clientY - rect.top
                 };
-            }
 
-            function startInteraction(e) {
-                if (isRevealed) return;
-                isDrawing = true;
-                scratch(e);
-            }
+                setupCanvas();
+                window.addEventListener('resize', setupCanvas);
 
-            function endInteraction() {
-                isDrawing = false;
-            }
+                const scratch = (x, y) => {
+                    ctx.globalCompositeOperation = 'destination-out';
+                    
+                    // Create softer brush
+                    const brushGradient = ctx.createRadialGradient(x, y, 0, x, y, 15);
+                    brushGradient.addColorStop(0, 'rgba(0,0,0,1)');
+                    brushGradient.addColorStop(1, 'rgba(0,0,0,0)');
+                    
+                    ctx.fillStyle = brushGradient;
+                    ctx.beginPath();
+                    ctx.arc(x, y, 15, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    checkReveal();
+                };
 
-            function scratch(e) {
-                if (!isDrawing || isRevealed) return;
+                // Throttled checking mechanism for performance
+                let checkTimeout = null;
+                const checkReveal = () => {
+                    if (isRevealed) return;
+                    if (checkTimeout) clearTimeout(checkTimeout);
+                    
+                    checkTimeout = setTimeout(() => {
+                        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                        const pixels = imageData.data;
+                        let transparentPixels = 0;
+                        let totalCirclePixels = 0;
 
-                // Prevent default ONLY while actively scratching inside the canvas
-                // This stops the page from pulling-to-refresh or zooming while scratching
-                if (e.cancelable) {
-                    e.preventDefault(); 
-                }
+                        // Check alpha channel for transparency in a rough grid
+                        for (let i = 3; i < pixels.length; i += 16) { 
+                            totalCirclePixels++;
+                            if (pixels[i] < 128) {
+                                transparentPixels++;
+                            }
+                        }
 
-                const pos = getPosition(e);
+                        // If > 45% scratched, reveal entirely
+                        if (transparentPixels / totalCirclePixels > 0.45) {
+                            revealCard();
+                        }
+                    }, 50);
+                };
 
-                // Erase circle
-                ctx.beginPath();
-                ctx.arc(pos.x, pos.y, BRUSH_SIZE, 0, Math.PI * 2);
-                ctx.fill();
+                const revealCard = () => {
+                    isRevealed = true;
+                    canvas.style.opacity = '0';
+                    canvas.style.pointerEvents = 'none';
+                    totalRevealed++;
 
-                // Ultra-fast no-lag completion logic
-                // Instead of analyzing pixels (which causes lag), we just count movements
-                scratchCount++;
+                    // Trigger confetti when all 3 are fully revealed
+                    if (totalRevealed === canvases.length) {
+                        fireConfetti();
+                    }
+                };
+
+                const getCoordinates = (e) => {
+                    const rect = canvas.getBoundingClientRect();
+                    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+                    return {
+                        x: clientX - rect.left,
+                        y: clientY - rect.top
+                    };
+                };
+
+                const handleStart = (e) => {
+                    if (isRevealed) return;
+                    isDrawing = true;
+                    const { x, y } = getCoordinates(e);
+                    scratch(x, y);
+                    if (e.cancelable) e.preventDefault();
+                };
+
+                const handleMove = (e) => {
+                    if (!isDrawing || isRevealed) return;
+                    const { x, y } = getCoordinates(e);
+                    scratch(x, y);
+                    if (e.cancelable) e.preventDefault();
+                };
+
+                const handleEnd = () => {
+                    isDrawing = false;
+                };
+
+                // Mouse Events
+                canvas.addEventListener('mousedown', handleStart);
+                canvas.addEventListener('mousemove', handleMove);
+                window.addEventListener('mouseup', handleEnd);
                 
-                if (scratchCount > SCRATCHES_TO_REVEAL) {
-                    revealAll();
-                }
+                // Touch Events
+                canvas.addEventListener('touchstart', handleStart, { passive: false });
+                canvas.addEventListener('touchmove', handleMove, { passive: false });
+                window.addEventListener('touchend', handleEnd);
+            });
+        };
+
+        // Delay init slightly to ensure DOM dimensions are rendered
+        setTimeout(initScratchCards, 200);
+
+        // --- 5. Confetti Function ---
+        function fireConfetti() {
+            if(typeof confetti === 'function') {
+                const duration = 3 * 1000;
+                const end = Date.now() + duration;
+
+                (function frame() {
+                    confetti({
+                        particleCount: 5,
+                        angle: 60,
+                        spread: 55,
+                        origin: { x: 0 },
+                        colors: ['#e4c86e', '#ffffff', '#aa771c']
+                    });
+                    confetti({
+                        particleCount: 5,
+                        angle: 120,
+                        spread: 55,
+                        origin: { x: 1 },
+                        colors: ['#e4c86e', '#ffffff', '#aa771c']
+                    });
+
+                    if (Date.now() < end) {
+                        requestAnimationFrame(frame);
+                    }
+                }());
             }
+        }
 
-            // Instantly clear the rest of the canvas and show content
-            function revealAll() {
-                isRevealed = true;
-                
-                // Fade out the canvas via CSS transition
-                canvas.style.opacity = '0';
-                canvas.style.pointerEvents = 'none'; // Ensure it doesn't block clicks anymore
-                
-                // Animate the text underneath (scale up and glow)
-                revealContent.classList.add('active');
-            }
-
-            // Event Listeners for Mouse
-            canvas.addEventListener('mousedown', startInteraction);
-            canvas.addEventListener('mousemove', scratch);
-            canvas.addEventListener('mouseup', endInteraction);
-            canvas.addEventListener('mouseleave', endInteraction);
-
-            // Event Listeners for Touch (Mobile)
-            // passive: false is required to allow e.preventDefault() to work during scratching
-            canvas.addEventListener('touchstart', startInteraction, { passive: false });
-            canvas.addEventListener('touchmove', scratch, { passive: false });
-            canvas.addEventListener('touchend', endInteraction);
-
-            // Initialize
-            window.addEventListener('resize', resizeCanvas);
-            resizeCanvas();
-        });
     </script>
 </body>
 </html>
