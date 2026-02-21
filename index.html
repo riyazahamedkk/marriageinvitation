@@ -11,6 +11,9 @@
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
+    <!-- Canvas Confetti for the Reveal Effect -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
     <!-- Custom Configuration and Styling -->
     <script>
         tailwind.config = {
@@ -18,21 +21,18 @@
                 extend: {
                     colors: {
                         gold: '#e4c86e',
-                        galaxy: {
-                            900: '#040714',
-                            800: '#0b1021',
-                            700: '#141b33',
-                        },
-                        emerald: {
-                            950: '#0a261d',
-                            900: '#0f3b2d',
+                        space: {
+                            950: '#050b14', /* Deep space black/blue */
+                            900: '#0a1128',
+                            800: '#141e3c',
+                            100: '#e1e9f4',
+                            50: '#f0f4fa',
                         }
                     },
                     fontFamily: {
                         cinzel: ['Cinzel', 'serif'],
-                        cormorant: ['Cormorant Garamond', 'serif'],
+                        cursive: ['Great Vibes', 'cursive'], /* New Cursive Font */
                         montserrat: ['Montserrat', 'sans-serif'],
-                        cursive: ['Great Vibes', 'cursive'],
                     }
                 }
             }
@@ -40,73 +40,22 @@
     </script>
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap');
+        /* Imported Great Vibes for cursive, along with existing fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Great+Vibes&family=Montserrat:wght@300;400;500;600&display=swap');
 
         body {
-            background-color: #040714;
-            color: #f8fafc;
+            background-color: #050b14;
+            color: #f0f4fa;
             overflow-x: hidden;
             font-family: 'Montserrat', sans-serif;
         }
 
         ::selection {
-            background-color: #ca8a04; /* yellow-600 */
+            background-color: #ca8a04;
             color: white;
         }
 
-        /* --- Ambient Background --- */
-        .bg-galaxy-gradient {
-            background: linear-gradient(180deg, #040714 0%, #0b1021 40%, #141b33 80%, #040714 100%);
-        }
-
-        /* Glowing Moon */
-        .moon {
-            position: fixed;
-            top: 5%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            background: radial-gradient(circle at 30% 30%, #ffffff 0%, #fdf4ff 20%, #e9d5ff 60%, #c084fc 100%);
-            box-shadow: 
-                0 0 60px 20px rgba(192, 132, 252, 0.2), 
-                0 0 120px 40px rgba(192, 132, 252, 0.1),
-                inset -20px -20px 40px rgba(0,0,0,0.2);
-            z-index: 0;
-            animation: moonFloat 10s ease-in-out infinite alternate;
-            pointer-events: none;
-        }
-
-        @keyframes moonFloat {
-            0% { transform: translate(-50%, 0px) scale(1); }
-            100% { transform: translate(-50%, 15px) scale(1.02); }
-        }
-
-        /* --- Name Glow Effect --- */
-        .name-glow {
-            font-family: 'Great Vibes', cursive;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-            transition: all 0.4s ease;
-        }
-        .name-glow:hover {
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 0 0 40px rgba(192, 132, 252, 0.6);
-            transform: scale(1.02);
-        }
-
-        /* --- Heart Mask --- */
-        .heart-mask {
-            -webkit-mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M462.3 62.6C407.5 15.9 326 24.3 275.7 76.2L256 96.5l-19.7-20.3C186.1 24.3 104.5 15.9 49.7 62.6c-62.8 53.6-66.1 149.8-9.9 207.9l193.5 199.8c12.5 12.9 32.8 12.9 45.3 0l193.5-199.8c56.3-58.1 53-154.3-9.8-207.9z"/></svg>');
-            mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M462.3 62.6C407.5 15.9 326 24.3 275.7 76.2L256 96.5l-19.7-20.3C186.1 24.3 104.5 15.9 49.7 62.6c-62.8 53.6-66.1 149.8-9.9 207.9l193.5 199.8c12.5 12.9 32.8 12.9 45.3 0l193.5-199.8c56.3-58.1 53-154.3-9.8-207.9z"/></svg>');
-            -webkit-mask-size: contain;
-            mask-size: contain;
-            -webkit-mask-repeat: no-repeat;
-            mask-repeat: no-repeat;
-            -webkit-mask-position: center;
-            mask-position: center;
-        }
-
-        /* --- Particles --- */
+        /* --- Galaxy Stars Particles --- */
         #particles-container {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -114,30 +63,25 @@
             z-index: 0;
             pointer-events: none;
         }
-        .particle {
+        
+        .star {
             position: absolute;
-            display: block;
-            pointer-events: none;
-            width: 4px;
-            height: 4px;
-            background-color: rgba(228, 200, 110, 0.4);
-            box-shadow: 0 0 10px rgba(228, 200, 110, 0.8);
+            background-color: #ffffff;
             border-radius: 50%;
-            animation: float infinite linear;
+            animation: twinkle infinite alternate ease-in-out;
         }
-        @keyframes float {
-            0% { transform: translateY(100vh) translateX(0) scale(0); opacity: 0; }
-            10% { opacity: 1; transform: translateY(80vh) translateX(10px) scale(1); }
-            90% { opacity: 1; }
-            100% { transform: translateY(-10vh) translateX(20px) scale(0); opacity: 0; }
+
+        @keyframes twinkle {
+            0% { opacity: 0.2; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1.2); box-shadow: 0 0 6px rgba(255, 255, 255, 0.8); }
         }
 
         /* --- Glassmorphism --- */
         .glass-card {
-            background: rgba(255, 255, 255, 0.04);
+            background: rgba(10, 17, 40, 0.4);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(228, 200, 110, 0.2);
+            border: 1px solid rgba(228, 200, 110, 0.15);
         }
 
         /* --- Scroll Reveal Animation --- */
@@ -160,11 +104,13 @@
             transform: translateZ(0);
             transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
-        /* Topographical Background for Venue Cards */
-        .bg-topo {
-            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23e4c86e' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
-            background-size: 80px;
+        
+        /* Subtle star-map background for venue cards */
+        .bg-starmap {
+            background-image: radial-gradient(rgba(228, 200, 110, 0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
         }
+
         /* Animated Radar Ping */
         @keyframes radar-pulse {
             0% { transform: scale(1); opacity: 0.8; }
@@ -183,91 +129,66 @@
         /* Premium Button Style */
         .btn-premium {
             background: linear-gradient(135deg, #e4c86e 0%, #b38728 100%);
-            box-shadow: 0 4px 15px rgba(228, 200, 110, 0.3);
+            box-shadow: 0 4px 15px rgba(228, 200, 110, 0.2);
             transition: all 0.3s ease;
         }
         .btn-premium:hover {
-            box-shadow: 0 6px 20px rgba(228, 200, 110, 0.5);
+            box-shadow: 0 6px 20px rgba(228, 200, 110, 0.4);
             transform: translateY(-2px);
         }
     </style>
 </head>
-<body class="relative min-h-screen bg-galaxy-gradient selection:bg-yellow-600 selection:text-white">
+<body class="relative min-h-screen selection:bg-yellow-600 selection:text-white">
 
     <!-- Background Layers -->
-    <div class="moon"></div>
+    <div class="fixed inset-0 z-0 bg-gradient-to-b from-space-950 via-space-900 to-space-950 pointer-events-none"></div>
+    
+    <!-- CSS Crescent Moon -->
+    <div class="absolute top-20 right-10 md:top-32 md:right-32 w-24 h-24 md:w-40 md:h-40 rounded-full shadow-[inset_-12px_-12px_0_0_#e4c86e] md:shadow-[inset_-18px_-18px_0_0_#e4c86e] opacity-80 blur-[1px] z-0 transform rotate-12 pointer-events-none"></div>
+    
+    <!-- Stars Container -->
     <div id="particles-container"></div>
-    <canvas id="confetti-canvas" class="fixed inset-0 z-50 pointer-events-none"></canvas>
 
     <!-- Main Content -->
     <div class="relative z-10 container mx-auto px-4 py-16 flex flex-col items-center justify-center min-h-screen text-center">
         
         <!-- Hero Section -->
         <div class="w-full flex flex-col items-center reveal" style="transition-delay: 100ms;">
-            <div class="mb-6 font-cormorant text-2xl md:text-3xl text-gold drop-shadow-md tracking-widest">
+            <div class="mb-6 font-cinzel font-semibold text-xl md:text-2xl text-gold drop-shadow-md tracking-widest">
                 بِسْمِ ٱللَّٰهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ
             </div>
-            <p class="font-montserrat text-xs md:text-sm tracking-[0.2em] md:tracking-[0.3em] uppercase text-emerald-100/80 mb-12 font-light">
+            <p class="font-montserrat text-xs md:text-sm tracking-[0.2em] md:tracking-[0.3em] uppercase text-space-100/80 mb-8 font-light">
                 We cordially invite you to celebrate the wedding of
             </p>
         </div>
 
-        <!-- The Couple (Scratch Reveal Effect) -->
+        <!-- The Couple (Heart Scratch Reveal Effect) -->
         <div class="w-full reveal" style="transition-delay: 300ms;">
-            <div id="scratch-container" class="relative w-full max-w-5xl mx-auto my-12 touch-none select-none rounded-2xl p-6 md:p-12">
+            <div id="scratch-container" class="relative w-full max-w-5xl mx-auto my-8 touch-none select-none rounded-2xl p-6 md:p-12">
                 
-                <!-- Hidden Names -->
-                <div id="hidden-names" class="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-12 w-full py-8 opacity-10 pointer-events-none transition-opacity duration-1000">
-                    <h1 class="font-cormorant text-5xl md:text-6xl lg:text-7xl text-gold font-medium tracking-wide drop-shadow-lg leading-tight w-full md:w-5/12 text-center md:text-right">
-                        Abdul Sathar<br/>Moomeen
+                <!-- Hidden Names (Single Line format, Cursive & Italics) -->
+                <div id="hidden-names" class="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8 w-full py-8 opacity-10 pointer-events-none transition-opacity duration-1000">
+                    <h1 class="font-cursive italic text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-gold font-medium tracking-wide drop-shadow-lg leading-tight whitespace-nowrap">
+                        Abdul Sathar
                     </h1>
                     
-                    <div class="w-full md:w-2/12 flex justify-center py-4 md:py-0">
-                        <i data-lucide="heart" class="w-10 h-10 md:w-14 md:h-14 text-gold"></i>
+                    <div class="flex-shrink-0 flex justify-center py-2 md:py-0">
+                        <i data-lucide="heart" class="w-8 h-8 md:w-12 md:h-12 text-gold fill-gold animate-pulse drop-shadow-[0_0_15px_rgba(228,200,110,0.6)]"></i>
                     </div>
 
-                    <h1 class="font-cormorant text-5xl md:text-6xl lg:text-7xl text-gold font-medium tracking-wide drop-shadow-lg leading-tight w-full md:w-5/12 text-center md:text-left">
-            <p class="font-montserrat text-xs md:text-sm tracking-[0.2em] md:tracking-[0.3em] uppercase text-purple-200/80 mb-12 font-light">
-                We cordially invite you to celebrate the wedding of
-            </p>
-        </div>
-
-        <!-- The Couple Names -->
-        <div class="w-full reveal mb-10 overflow-hidden" style="transition-delay: 200ms;">
-            <!-- ONE LINE ONLY, cursive font, glowing hover, responsive size prevents break -->
-            <h1 class="name-glow text-3xl sm:text-4xl md:text-6xl lg:text-8xl text-gold whitespace-nowrap text-center">
-                Abdul Sathar <span class="text-purple-300 mx-2">&</span> Rukzana
-            </h1>
-        </div>
-
-        <!-- Heart Scratch Reveal -->
-        <div class="w-full reveal flex justify-center mb-16" style="transition-delay: 300ms;">
-            <div class="flex flex-col items-center">
-                <p class="font-montserrat text-xs uppercase tracking-[0.2em] text-purple-200/60 mb-6">
-                    Scratch the heart to reveal
-                </p>
-                <!-- Heart Scratch Canvas Technique -->
-                <div id="scratch-container" class="relative w-64 h-64 md:w-80 md:h-80 heart-mask bg-galaxy-800 shadow-[inset_0_0_50px_rgba(0,0,0,0.8)] touch-none select-none">
-                    
-                    <!-- Hidden Content -->
-                    <div id="hidden-names" class="absolute inset-0 flex flex-col items-center justify-center p-4 opacity-10 pointer-events-none transition-opacity duration-1000">
-                        <span class="font-cinzel text-xl md:text-2xl text-gold mb-2 drop-shadow-md tracking-widest">
-                            Save the Date!
-                        </span>
-                        <span class="font-montserrat text-sm tracking-wider text-purple-100 font-light mt-2">
-                            May 31st, 2026
-                        </span>
-                    </div>
-
-                    <!-- Canvas Overlay -->
-                    <canvas id="scratch-canvas" class="absolute top-0 left-0 w-full h-full cursor-pointer transition-opacity duration-[1500ms] shadow-[0_0_30px_rgba(192,132,252,0.3)]"></canvas>
+                    <h1 class="font-cursive italic text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-gold font-medium tracking-wide drop-shadow-lg leading-tight whitespace-nowrap">
+                        Rukzana Fathima
+                    </h1>
                 </div>
+
+                <!-- Canvas Overlay -->
+                <canvas id="scratch-canvas" class="absolute top-0 left-0 w-full h-full cursor-pointer transition-opacity duration-[1500ms] shadow-[0_0_30px_rgba(228,200,110,0.15)] rounded-2xl"></canvas>
             </div>
         </div>
 
         <!-- Invitation Text -->
-        <div class="w-full max-w-2xl my-16 px-6 reveal" style="transition-delay: 500ms;">
-            <p class="font-montserrat text-sm md:text-base text-purple-100/90 leading-loose font-light tracking-wide">
+        <div class="w-full max-w-2xl my-12 px-6 reveal" style="transition-delay: 500ms;">
+            <p class="font-montserrat text-sm md:text-base text-space-100/90 leading-loose font-light tracking-wide">
                 With the blessings of Allah (SWT),<br />
                 we are pleased to invite you to our Nikah ceremony on May 31, 2026.
                 <br /><br />
@@ -276,101 +197,132 @@
             <div class="w-24 h-px bg-gold/50 mx-auto mt-10"></div>
         </div>
 
-        <!-- Event Details Section (Perfect Equal Spacing via Grid) -->
-        <div class="w-full max-w-6xl grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-10 mb-24 relative perspective-[1000px] reveal" style="transition-delay: 700ms;">
+        <!-- Save the Date & Countdown -->
+        <!-- Note: mb-12 used here to match gap-12 in the grid below for perfectly even spacing -->
+        <div class="w-full max-w-3xl mb-12 glass-card p-8 md:p-12 rounded-[2rem] relative overflow-hidden group shadow-2xl reveal" style="transition-delay: 700ms;">
+            <div class="absolute inset-0 bg-gradient-to-br from-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
             
-            <!-- Date Card -->
-            <div class="venue-tilt h-full">
-                <div class="glass-card bg-topo p-8 md:p-10 rounded-3xl h-full flex flex-col items-center text-center shadow-2xl relative overflow-hidden group">
-                    <div class="absolute inset-0 bg-gradient-to-t from-galaxy-900/90 to-transparent"></div>
-                    <div class="venue-inner relative z-10 flex flex-col h-full items-center w-full justify-center">
-                        <div class="relative w-16 h-16 rounded-full bg-galaxy-800/80 border border-gold flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(228,200,110,0.2)] radar-ping">
-                            <i data-lucide="calendar" class="text-gold w-8 h-8"></i>
-                        </div>
-                        <h3 class="font-cinzel text-xl text-gold mb-4 tracking-widest uppercase">The Date</h3>
-                        <p class="font-montserrat text-lg text-gray-100 leading-relaxed font-light mb-6">
-                            Sunday, May 31st<br/>2026
-                        </p>
-                        <div class="grid grid-cols-4 gap-2 w-full font-montserrat mt-auto pt-4 border-t border-gold/30">
-                            <div class="flex flex-col items-center">
-                                <span id="days" class="text-xl font-light text-white tabular-nums">00</span>
-                                <span class="text-[9px] tracking-widest text-gold mt-1 uppercase">Days</span>
-                            </div>
-                            <div class="flex flex-col items-center">
-                                <span id="hours" class="text-xl font-light text-white tabular-nums">00</span>
-                                <span class="text-[9px] tracking-widest text-gold mt-1 uppercase">Hrs</span>
-                            </div>
-                            <div class="flex flex-col items-center">
-                                <span id="minutes" class="text-xl font-light text-white tabular-nums">00</span>
-                                <span class="text-[9px] tracking-widest text-gold mt-1 uppercase">Mins</span>
-                            </div>
-                            <div class="flex flex-col items-center">
-                                <span id="seconds" class="text-xl font-light text-white tabular-nums">00</span>
-                                <span class="text-[9px] tracking-widest text-gold mt-1 uppercase">Secs</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <h2 class="font-cinzel text-xl md:text-3xl text-space-50 tracking-[0.25em] mb-6 drop-shadow-md">SAVE THE DATE</h2>
+            
+            <div class="flex items-center justify-center gap-4 mb-10">
+                <div class="h-[1px] w-12 bg-gold/50 hidden md:block"></div>
+                <p class="font-montserrat text-lg md:text-2xl text-gold font-medium tracking-widest drop-shadow-md">
+                    SUNDAY, MAY 31, 2026
+                </p>
+                <div class="h-[1px] w-12 bg-gold/50 hidden md:block"></div>
             </div>
 
-            <!-- Location Card -->
-            <div class="venue-tilt h-full">
-                <div class="glass-card bg-topo p-8 md:p-10 rounded-3xl h-full flex flex-col items-center text-center shadow-2xl relative overflow-hidden group">
-                    <div class="absolute inset-0 bg-gradient-to-t from-galaxy-900/90 to-transparent"></div>
-                    <div class="venue-inner relative z-10 flex flex-col h-full items-center w-full justify-center">
-                        <div class="relative w-16 h-16 rounded-full bg-galaxy-800/80 border border-gold flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(228,200,110,0.2)] radar-ping">
-                            <i data-lucide="map-pin" class="text-gold w-8 h-8"></i>
+            <div class="grid grid-cols-4 gap-4 md:gap-8 max-w-lg mx-auto font-montserrat relative z-10">
+                <div class="flex flex-col items-center bg-space-950/60 p-3 md:p-4 rounded-xl border border-gold/20">
+                    <span id="days" class="text-2xl md:text-4xl font-light text-space-50 tabular-nums">00</span>
+                    <span class="text-[9px] md:text-xs tracking-widest text-gold mt-2 uppercase font-medium">DAYS</span>
+                </div>
+                <div class="flex flex-col items-center bg-space-950/60 p-3 md:p-4 rounded-xl border border-gold/20">
+                    <span id="hours" class="text-2xl md:text-4xl font-light text-space-50 tabular-nums">00</span>
+                    <span class="text-[9px] md:text-xs tracking-widest text-gold mt-2 uppercase font-medium">HOURS</span>
+                </div>
+                <div class="flex flex-col items-center bg-space-950/60 p-3 md:p-4 rounded-xl border border-gold/20">
+                    <span id="minutes" class="text-2xl md:text-4xl font-light text-space-50 tabular-nums">00</span>
+                    <span class="text-[9px] md:text-xs tracking-widest text-gold mt-2 uppercase font-medium">MINS</span>
+                </div>
+                <div class="flex flex-col items-center bg-space-950/60 p-3 md:p-4 rounded-xl border border-gold/20">
+                    <span id="seconds" class="text-2xl md:text-4xl font-light text-space-50 tabular-nums">00</span>
+                    <span class="text-[9px] md:text-xs tracking-widest text-gold mt-2 uppercase font-medium">SECS</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Advanced Venues Section (Even gap-12 spacing to match the mb-12 above) -->
+        <div class="w-full max-w-6xl grid grid-cols-1 md:grid-cols-2 gap-12 mb-24 relative perspective-[1000px]">
+            
+            <!-- Nikah Ceremony Card -->
+            <div class="venue-tilt h-full reveal" style="transition-delay: 200ms;">
+                <div class="glass-card bg-starmap p-8 md:p-12 rounded-3xl h-full flex flex-col items-center text-center shadow-2xl relative overflow-hidden group">
+                    <div class="absolute inset-0 bg-gradient-to-t from-space-950/90 to-transparent"></div>
+                    
+                    <div class="venue-inner relative z-10 flex flex-col h-full items-center w-full">
+                        <div class="relative w-20 h-20 rounded-full bg-space-950/80 border border-gold flex items-center justify-center mb-8 shadow-[0_0_20px_rgba(228,200,110,0.2)] radar-ping">
+                            <i data-lucide="map-pin" class="text-gold w-10 h-10"></i>
                         </div>
-                        <h3 class="font-cinzel text-xl text-gold mb-4 tracking-widest uppercase">Location</h3>
-                        <div class="flex items-center justify-center gap-2 text-purple-200 mb-4 font-montserrat text-sm bg-galaxy-800/60 px-4 py-1.5 rounded-full border border-purple-800/50 backdrop-blur-sm">
+                        
+                        <h3 class="font-cinzel text-xl md:text-2xl text-gold mb-4 tracking-widest">The Ceremony</h3>
+                        
+                        <div class="flex items-center justify-center gap-2 text-space-200 mb-6 font-montserrat text-sm bg-space-950/60 px-5 py-2 rounded-full border border-space-800/80 backdrop-blur-sm">
                             <i data-lucide="clock" class="w-4 h-4"></i>
                             <span class="tracking-wide">11:00 AM</span>
                         </div>
-                        <h4 class="font-cormorant text-2xl text-gray-50 mb-4 font-medium leading-tight">
+                        
+                        <h4 class="font-cinzel text-2xl md:text-3xl text-space-50 mb-4 font-medium leading-tight">
                             Vadakku Adhi Mohideen<br/>Jumma Mosque
                         </h4>
-                        <p class="font-montserrat text-xs text-purple-200/70 leading-relaxed font-light mb-6 mt-auto">
+                        
+                        <p class="font-montserrat text-sm text-space-200/70 leading-relaxed font-light mb-10 max-w-[250px]">
+                            Gnaniarappa Peria Street,<br/>
                             Melapalayam, Tirunelveli
                         </p>
+                        
+                        <div class="mt-auto pt-4">
+                            <a href="https://www.google.com/maps/dir/?api=1&destination=8.6963411,77.7082719" target="_blank" rel="noopener noreferrer" class="btn-premium relative inline-flex items-center justify-center px-8 py-3.5 overflow-hidden font-montserrat text-sm font-semibold text-[#050b14] rounded-full group">
+                                <span class="absolute w-0 h-0 transition-all duration-500 ease-out bg-white rounded-full group-hover:w-56 group-hover:h-56 opacity-20"></span>
+                                <span class="relative flex items-center gap-2 tracking-wide uppercase">
+                                    <i data-lucide="navigation" class="w-4 h-4"></i> Get Directions
+                                </span>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Lunch Card -->
-            <div class="venue-tilt h-full">
-                <div class="glass-card bg-topo p-8 md:p-10 rounded-3xl h-full flex flex-col items-center text-center shadow-2xl relative overflow-hidden group">
-                    <div class="absolute inset-0 bg-gradient-to-t from-galaxy-900/90 to-transparent"></div>
-                    <div class="venue-inner relative z-10 flex flex-col h-full items-center w-full justify-center">
-                        <div class="relative w-16 h-16 rounded-full bg-galaxy-800/80 border border-gold flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(228,200,110,0.2)] radar-ping">
-                            <i data-lucide="utensils" class="text-gold w-8 h-8"></i>
+            <!-- Reception Feast Card -->
+            <div class="venue-tilt h-full reveal" style="transition-delay: 400ms;">
+                <div class="glass-card bg-starmap p-8 md:p-12 rounded-3xl h-full flex flex-col items-center text-center shadow-2xl relative overflow-hidden group">
+                    <div class="absolute inset-0 bg-gradient-to-t from-space-950/90 to-transparent"></div>
+                    
+                    <div class="venue-inner relative z-10 flex flex-col h-full items-center w-full">
+                        <div class="relative w-20 h-20 rounded-full bg-space-950/80 border border-gold flex items-center justify-center mb-8 shadow-[0_0_20px_rgba(228,200,110,0.2)] radar-ping">
+                            <i data-lucide="utensils" class="text-gold w-10 h-10"></i>
                         </div>
-                        <h3 class="font-cinzel text-xl text-gold mb-4 tracking-widest uppercase">Lunch</h3>
-                        <div class="flex items-center justify-center gap-2 text-purple-200 mb-4 font-montserrat text-sm bg-galaxy-800/60 px-4 py-1.5 rounded-full border border-purple-800/50 backdrop-blur-sm">
+                        
+                        <h3 class="font-cinzel text-xl md:text-2xl text-gold mb-4 tracking-widest">The Feast</h3>
+                        
+                        <div class="flex items-center justify-center gap-2 text-space-200 mb-6 font-montserrat text-sm bg-space-950/60 px-5 py-2 rounded-full border border-space-800/80 backdrop-blur-sm">
                             <i data-lucide="calendar-heart" class="w-4 h-4"></i>
                             <span class="tracking-wide">Following Ceremony</span>
                         </div>
-                        <h4 class="font-cormorant text-2xl text-gray-50 mb-4 font-medium leading-tight">
+                        
+                        <h4 class="font-cinzel text-2xl md:text-3xl text-space-50 mb-4 font-medium leading-tight">
                             K.S. Mahal
                         </h4>
-                        <p class="font-montserrat text-xs text-purple-200/70 leading-relaxed font-light mb-6 mt-auto">
-                            Fathima Nagar,<br/>Melapalayam, Tirunelveli
+                        
+                        <p class="font-montserrat text-sm text-space-200/70 leading-relaxed font-light mb-10 max-w-[250px]">
+                            Fathima Nagar,<br/>
+                            Melapalayam, Tirunelveli
                         </p>
+                        
+                        <div class="mt-auto pt-4">
+                            <a href="https://www.google.com/maps/dir/?api=1&destination=8.6841115,77.7200873" target="_blank" rel="noopener noreferrer" class="btn-premium relative inline-flex items-center justify-center px-8 py-3.5 overflow-hidden font-montserrat text-sm font-semibold text-[#050b14] rounded-full group">
+                                <span class="absolute w-0 h-0 transition-all duration-500 ease-out bg-white rounded-full group-hover:w-56 group-hover:h-56 opacity-20"></span>
+                                <span class="relative flex items-center gap-2 tracking-wide uppercase">
+                                    <i data-lucide="navigation" class="w-4 h-4"></i> Get Directions
+                                </span>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
 
         </div>
 
-        <!-- Footer With Hadith Text -->
+        <!-- Footer -->
         <div class="w-full flex flex-col items-center pb-12 reveal" style="transition-delay: 300ms;">
             <div class="w-12 h-px bg-gold mb-8 opacity-50"></div>
-            <p class="font-cormorant text-2xl md:text-3xl text-gray-100 italic mb-2 tracking-wide">
-                "We created you in pairs"
+            <p class="font-cinzel text-lg md:text-xl text-space-100 italic mb-2 tracking-wide">
+                "And We created you in pairs"
             </p>
-            <p class="font-montserrat text-xs text-purple-300/80 mb-6 font-light tracking-[0.2em]">
-                (Qur’an 78:8)
+            <p class="font-montserrat text-xs text-gold/80 mb-6">
+                (Quran 78:8)
             </p>
-            <p class="font-montserrat text-[10px] md:text-xs tracking-[0.3em] text-gold/70 uppercase font-semibold">
+            <p class="font-montserrat text-[10px] md:text-xs tracking-[0.3em] text-space-200/50 uppercase font-semibold">
                 We eagerly await your presence
             </p>
         </div>
@@ -382,82 +334,31 @@
         // Initialize Icons
         lucide.createIcons();
 
-        // --- 1. Animated Galaxy Stars ---
+        // --- 1. Generate Galaxy Stars Background Particles ---
         const particleContainer = document.getElementById('particles-container');
-        for (let i = 0; i < 60; i++) {
+        for (let i = 0; i < 150; i++) {
             const particle = document.createElement('div');
-            particle.className = 'particle';
-            // Star styling overriden dynamically for galaxy theme
-            particle.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
-            particle.style.boxShadow = '0 0 5px rgba(255, 255, 255, 0.5)';
+            particle.className = 'star';
+            
+            // Random positioning and styling
             particle.style.left = `${Math.random() * 100}%`;
-            particle.style.animationDelay = `${Math.random() * 5}s`;
-            particle.style.animationDuration = `${5 + Math.random() * 10}s`;
-            // Vary sizes
-            const size = Math.random() * 3 + 1;
+            particle.style.top = `${Math.random() * 100}%`;
+            
+            // Varied star sizes
+            const size = Math.random() * 2.5 + 0.5;
             particle.style.width = `${size}px`;
             particle.style.height = `${size}px`;
+            
+            // Varied twinkling speeds
+            particle.style.animationDelay = `${Math.random() * 5}s`;
+            particle.style.animationDuration = `${Math.random() * 3 + 1.5}s`;
+            
+            // Some stars are slightly golden/blue
+            const colors = ['#ffffff', '#ffffff', '#e4c86e', '#e1e9f4'];
+            particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            
             particleContainer.appendChild(particle);
         }
-
-        // --- Confetti Engine ---
-        const fireConfetti = () => {
-            const canvas = document.getElementById('confetti-canvas');
-            if (!canvas) return;
-            const ctx = canvas.getContext('2d');
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            
-            let particles = [];
-            const colors = ['#fcd34d', '#c084fc', '#e879f9', '#ffffff'];
-
-            for (let i = 0; i < 100; i++) {
-                particles.push({
-                    x: canvas.width / 2,
-                    y: canvas.height / 2,
-                    r: Math.random() * 6 + 2,
-                    dx: Math.random() * 20 - 10,
-                    dy: Math.random() * -20 - 5,
-                    color: colors[Math.floor(Math.random() * colors.length)],
-                    tilt: Math.floor(Math.random() * 10) - 10,
-                    tiltAngleInc: (Math.random() * 0.07) + 0.05,
-                    tiltAngle: 0
-                });
-            }
-
-            let animationId;
-            let frameCount = 0;
-            const draw = () => {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                let remaining = false;
-                frameCount++;
-
-                particles.forEach(p => {
-                    p.tiltAngle += p.tiltAngleInc;
-                    p.y += (Math.cos(p.tiltAngle) + 1 + p.r / 2) / 2;
-                    p.x += Math.sin(p.tiltAngle) * 2 + p.dx * 0.5;
-                    p.dy += 0.2; 
-                    p.y += p.dy;
-
-                    if (p.y < canvas.height + 20) remaining = true;
-
-                    ctx.beginPath();
-                    ctx.lineWidth = p.r;
-                    ctx.strokeStyle = p.color;
-                    ctx.moveTo(p.x + p.tilt + p.r, p.y);
-                    ctx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r);
-                    ctx.stroke();
-                });
-
-                if (remaining && frameCount < 300) { // Stop after ~5 seconds
-                    animationId = requestAnimationFrame(draw);
-                } else {
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
-                    cancelAnimationFrame(animationId);
-                }
-            };
-            draw();
-        };
 
         // --- 2. Scroll Reveal Observer ---
         const observerOptions = {
@@ -489,13 +390,11 @@
                 const centerX = rect.width / 2;
                 const centerY = rect.height / 2;
                 
-                // Calculate rotation (max 10 degrees)
                 const rotateX = ((y - centerY) / centerY) * -10;
                 const rotateY = ((x - centerX) / centerX) * 10;
                 
                 card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
                 
-                // Make inner content pop out slightly
                 if(inner) {
                     inner.style.transform = `translateZ(30px)`;
                 }
@@ -536,7 +435,7 @@
             sEl.innerText = String(seconds).padStart(2, '0');
         }, 1000);
 
-        // --- 5. Scratch Canvas Logic ---
+        // --- 5. Heart Scratch Canvas Logic & Confetti ---
         const initScratchCard = () => {
             const canvas = document.getElementById('scratch-canvas');
             const container = document.getElementById('scratch-container');
@@ -544,7 +443,7 @@
             
             if (!canvas || !container) return;
             
-            const ctx = canvas.getContext('2d', { willReadFrequently: true });
+            const ctx = canvas.getContext('2d');
             let isDrawing = false;
             let isRevealed = false;
             let scratchCount = 0;
@@ -554,21 +453,29 @@
                 canvas.width = container.offsetWidth;
                 canvas.height = container.offsetHeight;
 
-                // Galaxy theme gradient for scratch off
+                // Create Premium Gold Gradient Canvas Cover
                 const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-                gradient.addColorStop(0, '#2e1065');
-                gradient.addColorStop(0.5, '#4c1d95');
-                gradient.addColorStop(1, '#1e1b4b');
+                gradient.addColorStop(0, '#bf953f');
+                gradient.addColorStop(0.25, '#fcf6ba');
+                gradient.addColorStop(0.5, '#b38728');
+                gradient.addColorStop(0.75, '#fbf5b7');
+                gradient.addColorStop(1, '#aa771c');
                 
                 ctx.fillStyle = gradient;
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-                ctx.font = '300 18px "Montserrat", sans-serif';
-                ctx.fillStyle = 'rgba(233, 213, 255, 0.9)';
+                // Draw Instructions and Heart Symbol
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
                 
-                ctx.fillText('SCRATCH TO REVEAL', canvas.width / 2, canvas.height / 2);
+                // Heart graphic
+                ctx.font = '50px Arial';
+                ctx.fillText('❤️', canvas.width / 2, canvas.height / 2 - 20);
+
+                // Scratch Text
+                ctx.font = '600 18px "Montserrat", sans-serif';
+                ctx.fillStyle = '#050b14'; // Dark space color for text
+                ctx.fillText('SCRATCH TO REVEAL', canvas.width / 2, canvas.height / 2 + 35);
             };
 
             resizeCanvas();
@@ -576,14 +483,13 @@
 
             const scratch = (x, y) => {
                 ctx.globalCompositeOperation = 'destination-out';
-                const brushGradient = ctx.createRadialGradient(x, y, 0, x, y, 35);
+                const brushGradient = ctx.createRadialGradient(x, y, 0, x, y, 40);
                 brushGradient.addColorStop(0, 'rgba(0,0,0,1)');
-                brushGradient.addColorStop(0.6, 'rgba(0,0,0,0.8)');
                 brushGradient.addColorStop(1, 'rgba(0,0,0,0)');
                 
                 ctx.fillStyle = brushGradient;
                 ctx.beginPath();
-                ctx.arc(x, y, 35, 0, Math.PI * 2);
+                ctx.arc(x, y, 40, 0, Math.PI * 2);
                 ctx.fill();
             };
 
@@ -602,17 +508,17 @@
                 isDrawing = true;
                 const { x, y } = getCoordinates(e);
                 scratch(x, y);
-                if(e.cancelable) e.preventDefault();
+                e.preventDefault();
             };
 
             const handleMove = (e) => {
                 if (!isDrawing || isRevealed) return;
                 const { x, y } = getCoordinates(e);
                 scratch(x, y);
-                if(e.cancelable) e.preventDefault();
+                e.preventDefault();
 
                 scratchCount++;
-                if (scratchCount > 60) {
+                if (scratchCount > 80) { // adjusted to reveal slightly earlier
                     reveal();
                 }
             };
@@ -623,14 +529,39 @@
 
             const reveal = () => {
                 isRevealed = true;
-                canvas.style.transition = 'opacity 0.8s ease';
                 canvas.style.opacity = '0';
                 canvas.style.pointerEvents = 'none';
                 hiddenNames.classList.remove('opacity-10', 'pointer-events-none');
                 hiddenNames.classList.add('opacity-100');
                 
-                // Trigger Confetti Effect
-                fireConfetti();
+                // Trigger Confetti Celebration!
+                triggerConfetti();
+            };
+
+            const triggerConfetti = () => {
+                var duration = 3000;
+                var end = Date.now() + duration;
+
+                (function frame() {
+                    confetti({
+                        particleCount: 5,
+                        angle: 60,
+                        spread: 55,
+                        origin: { x: 0 },
+                        colors: ['#e4c86e', '#ffffff', '#b38728']
+                    });
+                    confetti({
+                        particleCount: 5,
+                        angle: 120,
+                        spread: 55,
+                        origin: { x: 1 },
+                        colors: ['#e4c86e', '#ffffff', '#b38728']
+                    });
+
+                    if (Date.now() < end) {
+                        requestAnimationFrame(frame);
+                    }
+                }());
             };
 
             canvas.addEventListener('mousedown', handleStart);
