@@ -384,8 +384,8 @@
                 </div>
             </div>
 
-            <!-- 2. Countdown Timer (Hidden until Scratch) -->
-            <div id="countdown-section" class="w-full flex-col items-center relative z-10 hidden opacity-0 transition-opacity duration-1000">
+            <!-- 2. Countdown Timer (Hidden until Scratch is complete) -->
+            <div id="countdown-section" class="w-full hidden flex-col items-center relative z-10 opacity-0 transition-opacity duration-1000">
                 <h2 class="font-cinzel text-lg md:text-2xl text-gold tracking-[0.2em] mb-6 drop-shadow-md">Time Remaining</h2>
                 <div class="grid grid-cols-4 gap-3 md:gap-6 max-w-lg mx-auto font-montserrat w-full px-2 md:px-4">
                     <div class="flex flex-col items-center bg-black/40 p-3 md:p-5 rounded-xl border border-white/10 backdrop-blur-sm shadow-xl">
@@ -601,7 +601,6 @@
                 if (!canvas) return;
                 
                 const container = canvas.parentElement;
-                // Removed willReadFrequently as it was heavily affecting touchmove performance on mobile
                 const ctx = canvas.getContext('2d');
                 let isDrawing = false;
                 let isRevealed = false;
@@ -634,7 +633,6 @@
                     ctx.strokeStyle = "rgba(255, 255, 255, 0.4)";
                     ctx.lineWidth = 2;
                     ctx.beginPath();
-                    // Fix: Ensure the inner radius is never a negative number
                     ctx.arc(cx, cy, Math.max(0, radius - 4), 0, Math.PI * 2);
                     ctx.stroke();
                 };
@@ -657,8 +655,6 @@
                     hasScratchedSinceLastCheck = true;
                 };
 
-                // OPTIMIZED: We only check image data when the user LIFTS their finger. 
-                // This prevents the massive lag ("hanging") during active scratching.
                 const checkReveal = () => {
                     if (isRevealed || !hasScratchedSinceLastCheck) return;
                     hasScratchedSinceLastCheck = false;
@@ -668,7 +664,6 @@
                     let transparentPixels = 0;
                     let totalCirclePixels = 0;
 
-                    // Skip pixels for faster checking (check 1 in every 64 pixels)
                     for (let i = 3; i < pixels.length; i += 256) { 
                         totalCirclePixels++;
                         if (pixels[i] < 128) {
@@ -676,7 +671,8 @@
                         }
                     }
 
-                    if (transparentPixels / totalCirclePixels > 0.40) {
+                    // Lowered threshold to 30% so it's easier to trigger the reveal on mobile
+                    if (transparentPixels / totalCirclePixels > 0.30) {
                         revealCard();
                     }
                 };
@@ -687,19 +683,20 @@
                     canvas.style.pointerEvents = 'none';
                     totalRevealed++;
 
+                    // Once all 3 circles are fully scratched, trigger confetti and SHOW countdown
                     if (totalRevealed === canvases.length) {
                         fireConfetti();
                         
-                        // Reveal the countdown section
                         const countdownSection = document.getElementById('countdown-section');
                         if (countdownSection) {
                             countdownSection.classList.remove('hidden');
                             countdownSection.classList.add('flex');
                             
-                            // Small delay ensures display:flex applies before opacity transition
+                            // Small delay allows display:flex to render before changing opacity
                             setTimeout(() => {
                                 countdownSection.classList.remove('opacity-0');
-                            }, 50);
+                                countdownSection.classList.add('opacity-100');
+                            }, 100);
                         }
                     }
                 };
@@ -731,7 +728,6 @@
 
                 const handleEnd = () => {
                     isDrawing = false;
-                    // Trigger the heavy pixel check only after the interaction stops
                     checkReveal();
                 };
 
