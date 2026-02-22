@@ -31,7 +31,6 @@
                         cinzel: ['Cinzel', 'serif'],
                         cormorant: ['Cormorant Garamond', 'serif'],
                         montserrat: ['Montserrat', 'sans-serif'],
-                        cursive: ['Great Vibes', 'cursive'],
                     }
                 }
             }
@@ -39,7 +38,7 @@
     </script>
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Great+Vibes&family=Montserrat:wght@300;400;500;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700&family=Montserrat:wght@300;400;500;600&display=swap');
 
         body {
             background-color: #060a14;
@@ -141,112 +140,7 @@
             transform: translateY(0) scale(1);
         }
 
-        /* --- Curtain Effect --- */
-        .curtain-wrapper {
-            position: relative;
-            width: 100%;
-            max-width: 900px;
-            aspect-ratio: 4/3; /* Taller aspect ratio for mobile to fit names */
-            margin: 0 auto;
-            border-radius: 1rem;
-            overflow: hidden;
-            box-shadow: 0 0 50px rgba(228, 200, 110, 0.2);
-            background-color: #fff;
-            background-image: url('images/curtain-open-C9MqdT6G.jpg');
-            background-size: 100% 100%;
-            background-position: center;
-            background-repeat: no-repeat;
-        }
-        
-        @media (min-width: 768px) {
-            .curtain-wrapper { aspect-ratio: 16/9; }
-        }
-
-        .curtain-panel {
-            position: absolute;
-            top: 0;
-            width: 51%; /* 51% creates a 1% overlap to prevent middle crack visible before opening */
-            height: 100%;
-            background-color: #8b0000;
-            background-image: url('images/curtain-closed-Bpkadld4.jpg');
-            background-size: 200% 100%;
-            background-repeat: no-repeat;
-            /* Smooth sliding and a fade out at the end of the transition */
-            transition: transform 2.2s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 1s ease 1s;
-            z-index: 20;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
-        }
-
-        .curtain-left {
-            left: 0;
-            background-position: left top;
-            transform-origin: left center;
-        }
-
-        .curtain-right {
-            right: 0;
-            background-position: right top;
-            transform-origin: right center;
-        }
-
-        /* Pushing curtains further than 100% and fading out creates seamless effect */
-        .curtain-wrapper.is-open .curtain-left {
-            transform: translateX(-105%);
-            opacity: 0;
-        }
-
-        .curtain-wrapper.is-open .curtain-right {
-            transform: translateX(105%);
-            opacity: 0;
-        }
-
-        .curtain-content {
-            position: absolute;
-            inset: 0;
-            z-index: 10;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: opacity 1.2s ease-in 0.8s;
-            padding: 1.5rem;
-            width: 100%;
-            height: 100%;
-        }
-
-        .curtain-wrapper.is-open .curtain-content {
-            opacity: 1;
-        }
-
-        /* Tap Icon Pulsate */
-        .tap-indicator {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 30;
-            cursor: pointer;
-            transition: opacity 0.5s ease;
-        }
-
-        .curtain-wrapper.is-open .tap-indicator {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .tap-icon-img {
-            width: 60px;
-            height: 60px;
-            animation: pulse-tap 2s infinite cubic-bezier(0.4, 0, 0.6, 1);
-        }
-
-        @keyframes pulse-tap {
-            0%, 100% { transform: scale(1); opacity: 1; filter: drop-shadow(0 0 10px rgba(255,255,255,0.5)); }
-            50% { transform: scale(1.1); opacity: 0.7; filter: drop-shadow(0 0 0px rgba(255,255,255,0)); }
-        }
-
-        /* --- Scratch Circle Styling --- */
+        /* --- Scratch Circle Styling (Dates) --- */
         .scratch-circle {
             position: relative;
             width: 90px;
@@ -259,7 +153,7 @@
             box-shadow: inset 0 0 15px rgba(0,0,0,0.1), 0 0 20px rgba(228, 200, 110, 0.2);
             overflow: hidden;
             user-select: none;
-            touch-action: none; /* Prevents scrolling while scratching */
+            touch-action: none;
         }
         @media (min-width: 400px) {
             .scratch-circle { width: 100px; height: 100px; }
@@ -307,7 +201,7 @@
     <div class="relative z-10 container mx-auto px-4 py-16 flex flex-col items-center min-h-screen text-center">
         
         <!-- Hero Section / Intro -->
-        <div class="w-full flex flex-col items-center reveal mb-12" style="transition-delay: 100ms;">
+        <div class="w-full flex flex-col items-center reveal mb-10" style="transition-delay: 100ms;">
             <div class="mb-6 font-cormorant text-2xl md:text-3xl text-gold drop-shadow-md tracking-widest">
                 بِسْمِ ٱللَّٰهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ
             </div>
@@ -316,32 +210,36 @@
             </p>
         </div>
 
-        <!-- The Names (Curtain Reveal Effect) -->
-        <div class="w-full reveal mb-10" style="transition-delay: 200ms;">
-            <div id="curtain-container" class="curtain-wrapper">
-                <!-- Left and Right Curtains -->
-                <div class="curtain-panel curtain-left"></div>
-                <div class="curtain-panel curtain-right"></div>
+        <!-- NEW: White Scratch Card with Gold Heart (Name Reveal) -->
+        <div class="w-full flex flex-col items-center reveal mb-10" style="transition-delay: 200ms;">
+            <div class="bg-white rounded-[2rem] shadow-[0_0_40px_rgba(228,200,110,0.15)] p-8 md:p-12 w-full max-w-[340px] sm:max-w-[400px] flex flex-col items-center relative overflow-hidden group border-2 border-white/20">
                 
-                <!-- Tap Icon -->
-                <div class="tap-indicator" onclick="openCurtains()">
-                    <!-- Using the tap icon image -->
-                    <img src="image_979c79.png" alt="Tap to view" class="tap-icon-img" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'60\' height=\'60\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'white\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'><path d=\'M18 11V6a2 2 0 0 0-4 0v4\'/><path d=\'M14 10V5a2 2 0 0 0-4 0v5\'/><path d=\'M10 10.5V4a2 2 0 0 0-4 0v9.5\'/><path d=\'M6 14v-1.5a2 2 0 0 0-4 0V16c0 4.4 3.6 8 8 8h3.3a2 2 0 0 0 1.9-1.3l2.6-7.8c.4-1.2-.4-2.5-1.7-2.7h-4.2l.6-1.2Z\'/></svg>'">
-                </div>
-
-                <!-- Hidden Content behind curtains restricted width so text doesn't overlap red area -->
-                <div class="curtain-content">
-                    <div class="w-[85%] sm:w-[75%] md:w-[60%] flex flex-col items-center justify-center text-center">
-                        <h1 class="font-cursive text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-red-950 font-medium tracking-wide drop-shadow-sm leading-tight w-full">
-                            <span class="text-[1.2em]">A</span>bdul <span class="text-[1.2em]">S</span>athar<br/>
-                            <span class="text-[1.2em]">M</span>oomeen
+                <!-- Inner elegant border -->
+                <div class="absolute inset-2 border border-gold/30 rounded-[1.5rem] pointer-events-none"></div>
+                
+                <!-- Scratch Area Container -->
+                <div class="relative w-full aspect-square flex flex-col items-center justify-center">
+                    
+                    <!-- Hidden Names (Revealed after scratching) -->
+                    <div class="text-center z-0 px-2 w-full flex flex-col items-center justify-center">
+                        <h1 class="font-cormorant text-3xl sm:text-4xl font-bold text-gray-900 leading-tight tracking-wide">
+                            <span class="text-[1.4em] text-[#b38728]">A</span>bdul <span class="text-[1.4em] text-[#b38728]">S</span>athar<br/>
+                            <span class="text-[1.4em] text-[#b38728]">M</span>oomeen
                         </h1>
-                        <span class="font-cormorant text-xl md:text-3xl text-yellow-600 my-2 md:my-4">&amp;</span>
-                        <h1 class="font-cursive text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-red-950 font-medium tracking-wide drop-shadow-sm leading-tight w-full">
-                            <span class="text-[1.2em]">R</span>ukzana <span class="text-[1.2em]">F</span>athima
+                        <div class="text-[#aa771c] font-cormorant italic text-3xl my-3">&amp;</div>
+                        <h1 class="font-cormorant text-3xl sm:text-4xl font-bold text-gray-900 leading-tight tracking-wide">
+                            <span class="text-[1.4em] text-[#b38728]">R</span>ukzana <span class="text-[1.4em] text-[#b38728]">F</span>athima
                         </h1>
                     </div>
+                    
+                    <!-- Canvas layer over the text -->
+                    <canvas id="name-scratch-canvas" class="absolute top-0 left-0 w-full h-full cursor-pointer z-10 transition-opacity duration-1000 touch-none"></canvas>
                 </div>
+                
+                <!-- Instruction Text -->
+                <p id="name-scratch-instruction" class="mt-6 text-gray-400 font-montserrat text-[10px] sm:text-xs tracking-widest uppercase font-medium">
+                    Scratch the gold heart to reveal
+                </p>
             </div>
         </div>
 
@@ -359,7 +257,7 @@
             
             <!-- 1. The Date (Scratch Reveal) -->
             <div class="w-full flex flex-col items-center reveal relative z-10">
-                <h2 class="font-cinzel text-xl md:text-3xl text-gold tracking-[0.25em] mb-4 drop-shadow-md">Reveal the Date</h2>
+                <h2 class="font-cinzel text-xl md:text-3xl text-gold tracking-[0.25em] mb-4 drop-shadow-md">Save the Date</h2>
                 <p class="font-montserrat text-[10px] md:text-sm tracking-widest text-gray-400 mb-10 uppercase">Scratch all three circles to continue</p>
                 
                 <div class="flex flex-row gap-3 md:gap-10 justify-center items-center mb-8">
@@ -384,7 +282,7 @@
                 </div>
             </div>
 
-            <!-- 2. Countdown Timer (Hidden until Scratch is complete) -->
+            <!-- 2. Countdown Timer (Hidden until Date Scratch is complete) -->
             <div id="countdown-section" class="w-full hidden flex-col items-center relative z-10 opacity-0 transition-opacity duration-1000">
                 <h2 class="font-cinzel text-lg md:text-2xl text-gold tracking-[0.2em] mb-6 drop-shadow-md">Time Remaining</h2>
                 <div class="grid grid-cols-4 gap-3 md:gap-6 max-w-lg mx-auto font-montserrat w-full px-2 md:px-4">
@@ -503,37 +401,25 @@
         // --- 1. Generate Galaxy Stars & Shooting Stars ---
         const particleContainer = document.getElementById('particles-container');
         
-        // Static stars
         for (let i = 0; i < 60; i++) {
             const star = document.createElement('div');
             star.className = 'star';
-            
-            // Randomize position
             star.style.left = `${Math.random() * 100}%`;
             star.style.top = `${Math.random() * 100}%`;
-            
-            // Randomize size (tiny stars)
             const size = Math.random() * 2 + 0.5;
             star.style.width = `${size}px`;
             star.style.height = `${size}px`;
-            
-            // Randomize animation
             star.style.animationDelay = `${Math.random() * 5}s`;
             star.style.animationDuration = `${Math.random() * 4 + 3}s`;
-            
             particleContainer.appendChild(star);
         }
 
-        // Shooting stars
         for (let i = 0; i < 4; i++) {
             const shootingStar = document.createElement('div');
             shootingStar.className = 'shooting-star';
-            
-            // Randomize position and animation delay
             shootingStar.style.top = `${Math.random() * 50}%`;
             shootingStar.style.left = `${Math.random() * 80}%`;
             shootingStar.style.animationDelay = `${Math.random() * 10}s`;
-            
             particleContainer.appendChild(shootingStar);
         }
 
@@ -554,19 +440,8 @@
 
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-        // --- 3. Curtain Logic ---
-        function openCurtains() {
-            const curtainContainer = document.getElementById('curtain-container');
-            curtainContainer.classList.add('is-open');
-        }
-
-        // --- 4. Countdown Timer Logic ---
+        // --- 3. Countdown Timer Logic ---
         const targetDate = new Date("May 31, 2026 11:00:00").getTime();
-        const dEl = document.getElementById('days');
-        const hEl = document.getElementById('hours');
-        const mEl = document.getElementById('minutes');
-        const sEl = document.getElementById('seconds');
-
         const updateCountdown = setInterval(() => {
             const now = new Date().getTime();
             const distance = targetDate - now;
@@ -581,14 +456,167 @@
             const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
+            const dEl = document.getElementById('days');
+            const hEl = document.getElementById('hours');
+            const mEl = document.getElementById('minutes');
+            const sEl = document.getElementById('seconds');
+
             if(dEl) dEl.innerText = String(days).padStart(2, '0');
             if(hEl) hEl.innerText = String(hours).padStart(2, '0');
             if(mEl) mEl.innerText = String(minutes).padStart(2, '0');
             if(sEl) sEl.innerText = String(seconds).padStart(2, '0');
         }, 1000);
 
-        // --- 5. Scratch Canvas Logic (Optimized for Mobile Performance) ---
-        const initScratchCards = () => {
+        // --- 4. Confetti Function ---
+        function fireConfetti() {
+            if(typeof confetti === 'function') {
+                const duration = 2.5 * 1000;
+                const end = Date.now() + duration;
+
+                (function frame() {
+                    confetti({
+                        particleCount: 5,
+                        angle: 60,
+                        spread: 55,
+                        origin: { x: 0 },
+                        colors: ['#e4c86e', '#ffffff', '#aa771c', '#0f3b2d']
+                    });
+                    confetti({
+                        particleCount: 5,
+                        angle: 120,
+                        spread: 55,
+                        origin: { x: 1 },
+                        colors: ['#e4c86e', '#ffffff', '#aa771c', '#0f3b2d']
+                    });
+
+                    if (Date.now() < end) {
+                        requestAnimationFrame(frame);
+                    }
+                }());
+            }
+        }
+
+        // --- 5. Name Heart Scratch Logic ---
+        const initNameScratch = () => {
+            const nameCanvas = document.getElementById('name-scratch-canvas');
+            if (!nameCanvas) return;
+            
+            const container = nameCanvas.parentElement;
+            const ctx = nameCanvas.getContext('2d');
+            let isDrawing = false;
+            let isRevealed = false;
+            let hasScratchedSinceLastCheck = false;
+
+            const setupCanvas = () => {
+                if (isRevealed) return;
+                nameCanvas.width = container.offsetWidth;
+                nameCanvas.height = container.offsetHeight;
+
+                if (nameCanvas.width === 0) return;
+
+                // Fill canvas with white (hides the text below it completely)
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, nameCanvas.width, nameCanvas.height);
+
+                // Draw Gold Heart in the center
+                const cx = nameCanvas.width / 2;
+                const cy = nameCanvas.height / 2 - 10;
+                const width = nameCanvas.width * 0.75; 
+                const height = width * 0.9;
+
+                ctx.save();
+                ctx.translate(cx, cy);
+                ctx.beginPath();
+                const topCurveHeight = height * 0.3;
+                
+                ctx.moveTo(0, topCurveHeight);
+                ctx.bezierCurveTo(0, 0, -width / 2, 0, -width / 2, topCurveHeight);
+                ctx.bezierCurveTo(-width / 2, (height + topCurveHeight) / 2, 0, (height + topCurveHeight) / 2, 0, height);
+                ctx.bezierCurveTo(0, (height + topCurveHeight) / 2, width / 2, (height + topCurveHeight) / 2, width / 2, topCurveHeight);
+                ctx.bezierCurveTo(width / 2, 0, 0, 0, 0, topCurveHeight);
+                ctx.closePath();
+
+                const gradient = ctx.createLinearGradient(-width/2, 0, width/2, height);
+                gradient.addColorStop(0, '#bf953f');
+                gradient.addColorStop(0.25, '#fcf6ba');
+                gradient.addColorStop(0.5, '#b38728');
+                gradient.addColorStop(0.75, '#fbf5b7');
+                gradient.addColorStop(1, '#aa771c');
+                ctx.fillStyle = gradient;
+
+                ctx.shadowColor = 'rgba(0,0,0,0.2)';
+                ctx.shadowBlur = 15;
+                ctx.shadowOffsetY = 8;
+                
+                ctx.fill();
+                ctx.restore();
+            };
+
+            setupCanvas();
+            window.addEventListener('resize', setupCanvas);
+
+            const scratch = (x, y) => {
+                ctx.globalCompositeOperation = 'destination-out';
+                const brushGradient = ctx.createRadialGradient(x, y, 0, x, y, 35);
+                brushGradient.addColorStop(0, 'rgba(0,0,0,1)');
+                brushGradient.addColorStop(1, 'rgba(0,0,0,0)');
+                ctx.fillStyle = brushGradient;
+                ctx.beginPath();
+                ctx.arc(x, y, 35, 0, Math.PI * 2);
+                ctx.fill();
+                hasScratchedSinceLastCheck = true;
+            };
+
+            const checkReveal = () => {
+                if (isRevealed || !hasScratchedSinceLastCheck) return;
+                hasScratchedSinceLastCheck = false;
+
+                // Check center area to see if enough is scratched
+                const imageData = ctx.getImageData(nameCanvas.width*0.2, nameCanvas.height*0.2, nameCanvas.width*0.6, nameCanvas.height*0.6);
+                const pixels = imageData.data;
+                let transparentPixels = 0;
+                let totalCirclePixels = 0;
+
+                for (let i = 3; i < pixels.length; i += 128) { 
+                    totalCirclePixels++;
+                    if (pixels[i] < 128) {
+                        transparentPixels++;
+                    }
+                }
+
+                if (transparentPixels / totalCirclePixels > 0.35) {
+                    isRevealed = true;
+                    nameCanvas.style.opacity = '0';
+                    nameCanvas.style.pointerEvents = 'none';
+                    
+                    const instruction = document.getElementById('name-scratch-instruction');
+                    if(instruction) instruction.innerText = "Beautiful!";
+                    
+                    fireConfetti(); // Trigger confetti on Name Reveal
+                }
+            };
+
+            const getCoordinates = (e) => {
+                const rect = nameCanvas.getBoundingClientRect();
+                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+                return { x: clientX - rect.left, y: clientY - rect.top };
+            };
+
+            const handleStart = (e) => { if (isRevealed) return; isDrawing = true; scratch(getCoordinates(e).x, getCoordinates(e).y); if (e.cancelable) e.preventDefault(); };
+            const handleMove = (e) => { if (!isDrawing || isRevealed) return; scratch(getCoordinates(e).x, getCoordinates(e).y); if (e.cancelable) e.preventDefault(); };
+            const handleEnd = () => { isDrawing = false; checkReveal(); };
+
+            nameCanvas.addEventListener('mousedown', handleStart);
+            nameCanvas.addEventListener('mousemove', handleMove);
+            window.addEventListener('mouseup', handleEnd);
+            nameCanvas.addEventListener('touchstart', handleStart, { passive: false });
+            nameCanvas.addEventListener('touchmove', handleMove, { passive: false });
+            window.addEventListener('touchend', handleEnd);
+        };
+
+        // --- 6. Date Scratch Cards Logic ---
+        const initDateScratchCards = () => {
             const canvases = [
                 document.getElementById('canvas-day'),
                 document.getElementById('canvas-month'),
@@ -615,7 +643,6 @@
                     const cy = canvas.height / 2;
                     const radius = Math.min(cx, cy);
 
-                    // Prevent drawing errors if container dimensions are not yet established
                     if (radius <= 0) return;
 
                     const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
@@ -642,16 +669,13 @@
 
                 const scratch = (x, y) => {
                     ctx.globalCompositeOperation = 'destination-out';
-                    
                     const brushGradient = ctx.createRadialGradient(x, y, 0, x, y, 15);
                     brushGradient.addColorStop(0, 'rgba(0,0,0,1)');
                     brushGradient.addColorStop(1, 'rgba(0,0,0,0)');
-                    
                     ctx.fillStyle = brushGradient;
                     ctx.beginPath();
                     ctx.arc(x, y, 15, 0, Math.PI * 2);
                     ctx.fill();
-                    
                     hasScratchedSinceLastCheck = true;
                 };
 
@@ -671,8 +695,8 @@
                         }
                     }
 
-                    // Lowered threshold to 30% so it's easier to trigger the reveal on mobile
-                    if (transparentPixels / totalCirclePixels > 0.30) {
+                    // High sensitivity for mobile ease of use
+                    if (transparentPixels / totalCirclePixels > 0.25) {
                         revealCard();
                     }
                 };
@@ -683,7 +707,7 @@
                     canvas.style.pointerEvents = 'none';
                     totalRevealed++;
 
-                    // Once all 3 circles are fully scratched, trigger confetti and SHOW countdown
+                    // Once all 3 circles are fully scratched, SHOW countdown and fire confetti
                     if (totalRevealed === canvases.length) {
                         fireConfetti();
                         
@@ -692,11 +716,10 @@
                             countdownSection.classList.remove('hidden');
                             countdownSection.classList.add('flex');
                             
-                            // Small delay allows display:flex to render before changing opacity
                             setTimeout(() => {
                                 countdownSection.classList.remove('opacity-0');
                                 countdownSection.classList.add('opacity-100');
-                            }, 100);
+                            }, 50);
                         }
                     }
                 };
@@ -705,74 +728,27 @@
                     const rect = canvas.getBoundingClientRect();
                     const clientX = e.touches ? e.touches[0].clientX : e.clientX;
                     const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-                    return {
-                        x: clientX - rect.left,
-                        y: clientY - rect.top
-                    };
+                    return { x: clientX - rect.left, y: clientY - rect.top };
                 };
 
-                const handleStart = (e) => {
-                    if (isRevealed) return;
-                    isDrawing = true;
-                    const { x, y } = getCoordinates(e);
-                    scratch(x, y);
-                    if (e.cancelable) e.preventDefault();
-                };
+                const handleStart = (e) => { if (isRevealed) return; isDrawing = true; scratch(getCoordinates(e).x, getCoordinates(e).y); if (e.cancelable) e.preventDefault(); };
+                const handleMove = (e) => { if (!isDrawing || isRevealed) return; scratch(getCoordinates(e).x, getCoordinates(e).y); if (e.cancelable) e.preventDefault(); };
+                const handleEnd = () => { isDrawing = false; checkReveal(); };
 
-                const handleMove = (e) => {
-                    if (!isDrawing || isRevealed) return;
-                    const { x, y } = getCoordinates(e);
-                    scratch(x, y);
-                    if (e.cancelable) e.preventDefault();
-                };
-
-                const handleEnd = () => {
-                    isDrawing = false;
-                    checkReveal();
-                };
-
-                // Mouse Events
                 canvas.addEventListener('mousedown', handleStart);
                 canvas.addEventListener('mousemove', handleMove);
                 window.addEventListener('mouseup', handleEnd);
-                
-                // Touch Events
                 canvas.addEventListener('touchstart', handleStart, { passive: false });
                 canvas.addEventListener('touchmove', handleMove, { passive: false });
                 window.addEventListener('touchend', handleEnd);
             });
         };
 
-        setTimeout(initScratchCards, 200);
-
-        // --- 6. Confetti Function ---
-        function fireConfetti() {
-            if(typeof confetti === 'function') {
-                const duration = 3 * 1000;
-                const end = Date.now() + duration;
-
-                (function frame() {
-                    confetti({
-                        particleCount: 5,
-                        angle: 60,
-                        spread: 55,
-                        origin: { x: 0 },
-                        colors: ['#e4c86e', '#ffffff', '#aa771c']
-                    });
-                    confetti({
-                        particleCount: 5,
-                        angle: 120,
-                        spread: 55,
-                        origin: { x: 1 },
-                        colors: ['#e4c86e', '#ffffff', '#aa771c']
-                    });
-
-                    if (Date.now() < end) {
-                        requestAnimationFrame(frame);
-                    }
-                }());
-            }
-        }
+        // Initialize scratches after brief delay to ensure layout is ready
+        setTimeout(() => {
+            initNameScratch();
+            initDateScratchCards();
+        }, 200);
 
     </script>
 </body>
