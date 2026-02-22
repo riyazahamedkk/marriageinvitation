@@ -210,7 +210,7 @@
             </p>
         </div>
 
-        <!-- NEW: White Scratch Card with Gold Heart (Name Reveal) -->
+        <!-- NEW: White Scratch Card with Authentic Glitter Heart (Name Reveal) -->
         <div class="w-full flex flex-col items-center reveal mb-10" style="transition-delay: 200ms;">
             <div class="bg-white rounded-[2rem] shadow-[0_0_40px_rgba(228,200,110,0.15)] p-8 md:p-12 w-full max-w-[340px] sm:max-w-[400px] flex flex-col items-center relative overflow-hidden group border-2 border-white/20">
                 
@@ -218,26 +218,26 @@
                 <div class="absolute inset-2 border border-gold/30 rounded-[1.5rem] pointer-events-none"></div>
                 
                 <!-- Scratch Area Container -->
-                <div class="relative w-full aspect-square flex flex-col items-center justify-center">
+                <div class="relative w-full aspect-square flex flex-col items-center justify-center pt-4">
                     
-                    <!-- Hidden Names (Revealed after scratching) -->
-                    <div class="text-center z-0 px-2 w-full flex flex-col items-center justify-center">
+                    <!-- Hidden Names (Revealed after scratching) - Sized carefully to hide within the heart boundary -->
+                    <div class="text-center z-0 w-[70%] max-w-[220px] flex flex-col items-center justify-center">
                         <h1 class="font-cormorant text-3xl sm:text-4xl font-bold text-gray-900 leading-tight tracking-wide">
                             <span class="text-[1.4em] text-[#b38728]">A</span>bdul <span class="text-[1.4em] text-[#b38728]">S</span>athar<br/>
                             <span class="text-[1.4em] text-[#b38728]">M</span>oomeen
                         </h1>
-                        <div class="text-[#aa771c] font-cormorant italic text-3xl my-3">&amp;</div>
+                        <div class="text-[#aa771c] font-cormorant italic text-3xl my-2">&amp;</div>
                         <h1 class="font-cormorant text-3xl sm:text-4xl font-bold text-gray-900 leading-tight tracking-wide">
                             <span class="text-[1.4em] text-[#b38728]">R</span>ukzana <span class="text-[1.4em] text-[#b38728]">F</span>athima
                         </h1>
                     </div>
                     
-                    <!-- Canvas layer over the text -->
+                    <!-- Canvas layer drawing purely the foil heart. Edges are completely transparent. -->
                     <canvas id="name-scratch-canvas" class="absolute top-0 left-0 w-full h-full cursor-pointer z-10 transition-opacity duration-1000 touch-none"></canvas>
                 </div>
                 
                 <!-- Instruction Text -->
-                <p id="name-scratch-instruction" class="mt-6 text-gray-400 font-montserrat text-[10px] sm:text-xs tracking-widest uppercase font-medium">
+                <p id="name-scratch-instruction" class="mt-8 text-gray-400 font-montserrat text-[10px] sm:text-xs tracking-widest uppercase font-medium">
                     Scratch the gold heart to reveal
                 </p>
             </div>
@@ -496,13 +496,45 @@
             }
         }
 
+        // --- Realistic Procedural Foil Generator ---
+        function getGlitterPattern(ctx) {
+            if (window.glitterPattern) return window.glitterPattern;
+            
+            // Create off-screen canvas for the noise texture
+            const noiseCanvas = document.createElement('canvas');
+            noiseCanvas.width = 120;
+            noiseCanvas.height = 120;
+            const nCtx = noiseCanvas.getContext('2d');
+            const imgData = nCtx.createImageData(120, 120);
+            const data = imgData.data;
+            
+            // Generate dense gold noise
+            for (let i = 0; i < data.length; i += 4) {
+                const rand = Math.random();
+                let r, g, b;
+                if (rand > 0.95) { // Bright sparkles
+                    r = 255; g = 250; b = 210;
+                } else if (rand > 0.5) { // Base metallic gold
+                    r = 205 + (Math.random()*40-20); g = 165 + (Math.random()*40-20); b = 60 + (Math.random()*30-15);
+                } else if (rand > 0.2) { // Darker gold grain
+                    r = 175 + (Math.random()*30-15); g = 130 + (Math.random()*30-15); b = 40 + (Math.random()*20-10);
+                } else { // Shadows/pits in the foil
+                    r = 140 + (Math.random()*20-10); g = 100 + (Math.random()*20-10); b = 25 + (Math.random()*20-10);
+                }
+                data[i] = r; data[i+1] = g; data[i+2] = b; data[i+3] = 255;
+            }
+            nCtx.putImageData(imgData, 0, 0);
+            window.glitterPattern = ctx.createPattern(noiseCanvas, 'repeat');
+            return window.glitterPattern;
+        }
+
         // --- 5. Name Heart Scratch Logic ---
         const initNameScratch = () => {
             const nameCanvas = document.getElementById('name-scratch-canvas');
             if (!nameCanvas) return;
             
             const container = nameCanvas.parentElement;
-            const ctx = nameCanvas.getContext('2d');
+            const ctx = nameCanvas.getContext('2d', { willReadFrequently: true });
             let isDrawing = false;
             let isRevealed = false;
             let hasScratchedSinceLastCheck = false;
@@ -514,18 +546,19 @@
 
                 if (nameCanvas.width === 0) return;
 
-                // Fill canvas with white (hides the text below it completely)
-                ctx.fillStyle = '#ffffff';
-                ctx.fillRect(0, 0, nameCanvas.width, nameCanvas.height);
+                // Ensure the background is entirely transparent (no white box)
+                ctx.clearRect(0, 0, nameCanvas.width, nameCanvas.height);
 
-                // Draw Gold Heart in the center
+                // Setup the heart geometry and center it
                 const cx = nameCanvas.width / 2;
                 const cy = nameCanvas.height / 2 - 10;
-                const width = nameCanvas.width * 0.75; 
-                const height = width * 0.9;
+                const width = nameCanvas.width * 0.85; // Large enough to cover the text
+                const height = width * 0.90;
 
                 ctx.save();
                 ctx.translate(cx, cy);
+                
+                // Draw Perfect Heart Path
                 ctx.beginPath();
                 const topCurveHeight = height * 0.3;
                 
@@ -536,19 +569,32 @@
                 ctx.bezierCurveTo(width / 2, 0, 0, 0, 0, topCurveHeight);
                 ctx.closePath();
 
-                const gradient = ctx.createLinearGradient(-width/2, 0, width/2, height);
-                gradient.addColorStop(0, '#bf953f');
-                gradient.addColorStop(0.25, '#fcf6ba');
-                gradient.addColorStop(0.5, '#b38728');
-                gradient.addColorStop(0.75, '#fbf5b7');
-                gradient.addColorStop(1, '#aa771c');
-                ctx.fillStyle = gradient;
-
-                ctx.shadowColor = 'rgba(0,0,0,0.2)';
-                ctx.shadowBlur = 15;
-                ctx.shadowOffsetY = 8;
-                
+                // Draw realistic drop shadow BEFORE clipping so the shadow spills outside the heart
+                ctx.shadowColor = 'rgba(0,0,0,0.15)';
+                ctx.shadowBlur = 12;
+                ctx.shadowOffsetY = 6;
+                ctx.fillStyle = '#b38728'; // solid base to catch shadow
                 ctx.fill();
+
+                // Now clip future drawing purely inside the heart path to prevent rectangular fills
+                ctx.clip();
+                ctx.shadowColor = 'transparent';
+
+                // Fill with procedural realistic foil
+                ctx.fillStyle = getGlitterPattern(ctx);
+                ctx.fillRect(-width, -height, width * 2, height * 2);
+
+                // Add 3D metallic lighting overlay
+                const gradient = ctx.createLinearGradient(-width/2, -height/2, width/2, height);
+                gradient.addColorStop(0, 'rgba(255, 255, 255, 0.45)');
+                gradient.addColorStop(0.35, 'rgba(255, 255, 255, 0)');
+                gradient.addColorStop(0.65, 'rgba(0, 0, 0, 0)');
+                gradient.addColorStop(1, 'rgba(0, 0, 0, 0.45)');
+                
+                ctx.globalCompositeOperation = 'source-atop';
+                ctx.fillStyle = gradient;
+                ctx.fillRect(-width, -height, width * 2, height * 2);
+
                 ctx.restore();
             };
 
@@ -557,13 +603,26 @@
 
             const scratch = (x, y) => {
                 ctx.globalCompositeOperation = 'destination-out';
-                const brushGradient = ctx.createRadialGradient(x, y, 0, x, y, 35);
-                brushGradient.addColorStop(0, 'rgba(0,0,0,1)');
-                brushGradient.addColorStop(1, 'rgba(0,0,0,0)');
-                ctx.fillStyle = brushGradient;
-                ctx.beginPath();
-                ctx.arc(x, y, 35, 0, Math.PI * 2);
-                ctx.fill();
+                
+                // Natural scratch brush (irregular clustered circles imitating coin scratching foil)
+                const numScratches = 5;
+                const baseRadius = 18; 
+                
+                for (let i = 0; i < numScratches; i++) {
+                    const offsetX = (Math.random() - 0.5) * 14;
+                    const offsetY = (Math.random() - 0.5) * 14;
+                    const radius = baseRadius + (Math.random() * 8);
+                    
+                    const brushGradient = ctx.createRadialGradient(x + offsetX, y + offsetY, 0, x + offsetX, y + offsetY, radius);
+                    brushGradient.addColorStop(0, 'rgba(0,0,0,1)');
+                    brushGradient.addColorStop(0.6, 'rgba(0,0,0,0.9)');
+                    brushGradient.addColorStop(1, 'rgba(0,0,0,0)'); // Soft edge erasing
+                    
+                    ctx.fillStyle = brushGradient;
+                    ctx.beginPath();
+                    ctx.arc(x + offsetX, y + offsetY, radius, 0, Math.PI * 2);
+                    ctx.fill();
+                }
                 hasScratchedSinceLastCheck = true;
             };
 
@@ -590,7 +649,9 @@
                     nameCanvas.style.pointerEvents = 'none';
                     
                     const instruction = document.getElementById('name-scratch-instruction');
-                    if(instruction) instruction.innerText = "Beautiful!";
+                    if(instruction) {
+                        instruction.style.opacity = '0';
+                    }
                     
                     fireConfetti(); // Trigger confetti on Name Reveal
                 }
@@ -629,7 +690,7 @@
                 if (!canvas) return;
                 
                 const container = canvas.parentElement;
-                const ctx = canvas.getContext('2d');
+                const ctx = canvas.getContext('2d', { willReadFrequently: true });
                 let isDrawing = false;
                 let isRevealed = false;
                 let hasScratchedSinceLastCheck = false;
@@ -645,23 +706,31 @@
 
                     if (radius <= 0) return;
 
-                    const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-                    gradient.addColorStop(0, '#d4af37');   // Gold
-                    gradient.addColorStop(0.3, '#fff4d0'); // Light Gold highlight
-                    gradient.addColorStop(0.5, '#aa771c'); // Dark Gold
-                    gradient.addColorStop(0.7, '#fff4d0'); // Light Gold highlight
-                    gradient.addColorStop(1, '#d4af37');   // Gold
-
-                    ctx.fillStyle = gradient;
+                    ctx.save();
                     ctx.beginPath();
                     ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+                    
+                    // Match realistic foil look on date circles too!
+                    ctx.fillStyle = getGlitterPattern(ctx);
                     ctx.fill();
 
-                    ctx.strokeStyle = "rgba(255, 255, 255, 0.4)";
+                    // Overlay shiny gradient
+                    const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+                    gradient.addColorStop(0, 'rgba(255,255,255,0.3)'); 
+                    gradient.addColorStop(0.5, 'rgba(255,255,255,0)'); 
+                    gradient.addColorStop(1, 'rgba(0,0,0,0.3)');   
+                    ctx.globalCompositeOperation = 'source-atop';
+                    ctx.fillStyle = gradient;
+                    ctx.fill();
+                    
+                    ctx.globalCompositeOperation = 'source-over';
+                    ctx.strokeStyle = "rgba(255, 255, 255, 0.5)";
                     ctx.lineWidth = 2;
                     ctx.beginPath();
                     ctx.arc(cx, cy, Math.max(0, radius - 4), 0, Math.PI * 2);
                     ctx.stroke();
+                    
+                    ctx.restore();
                 };
 
                 setupCanvas();
@@ -669,13 +738,27 @@
 
                 const scratch = (x, y) => {
                     ctx.globalCompositeOperation = 'destination-out';
-                    const brushGradient = ctx.createRadialGradient(x, y, 0, x, y, 15);
-                    brushGradient.addColorStop(0, 'rgba(0,0,0,1)');
-                    brushGradient.addColorStop(1, 'rgba(0,0,0,0)');
-                    ctx.fillStyle = brushGradient;
-                    ctx.beginPath();
-                    ctx.arc(x, y, 15, 0, Math.PI * 2);
-                    ctx.fill();
+                    
+                    // Natural foil scratch brush
+                    const numScratches = 4;
+                    const baseRadius = 15; 
+                    
+                    for (let i = 0; i < numScratches; i++) {
+                        const offsetX = (Math.random() - 0.5) * 10;
+                        const offsetY = (Math.random() - 0.5) * 10;
+                        const radius = baseRadius + (Math.random() * 6);
+                        
+                        const brushGradient = ctx.createRadialGradient(x + offsetX, y + offsetY, 0, x + offsetX, y + offsetY, radius);
+                        brushGradient.addColorStop(0, 'rgba(0,0,0,1)');
+                        brushGradient.addColorStop(0.6, 'rgba(0,0,0,0.9)');
+                        brushGradient.addColorStop(1, 'rgba(0,0,0,0)');
+                        
+                        ctx.fillStyle = brushGradient;
+                        ctx.beginPath();
+                        ctx.arc(x + offsetX, y + offsetY, radius, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                    
                     hasScratchedSinceLastCheck = true;
                 };
 
