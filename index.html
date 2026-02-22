@@ -197,6 +197,12 @@
         <!-- Shooting stars will be added dynamically -->
     </div>
 
+    <!-- Floating PDF Download Button -->
+    <a href="images/Invitation.pdf" download class="fixed bottom-6 right-6 z-[60] glass-card px-4 py-3 md:py-2.5 rounded-full flex items-center gap-2 text-gold hover:scale-105 hover:bg-white/10 transition-all duration-300 border border-gold/50 shadow-[0_0_20px_rgba(228,200,110,0.3)] group">
+        <i data-lucide="download" class="w-5 h-5 md:w-4 md:h-4 group-hover:-translate-y-0.5 transition-transform"></i>
+        <span class="text-[10px] md:text-xs font-montserrat font-bold tracking-widest uppercase hidden sm:block">E-Invite</span>
+    </a>
+
     <!-- Main Content -->
     <div class="relative z-10 container mx-auto px-4 py-16 flex flex-col items-center min-h-screen text-center">
         
@@ -211,18 +217,18 @@
         </div>
 
         <!-- Floating Authentic Glitter Heart (Name Reveal) without background box -->
-        <div class="w-full flex flex-col items-center reveal mb-10" style="transition-delay: 200ms;">
-            <div class="relative w-full max-w-[320px] sm:max-w-[400px] aspect-square flex flex-col items-center justify-center group mx-auto">
+        <div class="w-full flex flex-col items-center reveal mb-6" style="transition-delay: 200ms;">
+            <div class="relative w-full max-w-[340px] sm:max-w-[420px] md:max-w-[460px] aspect-square flex flex-col items-center justify-center group mx-auto">
                 
-                <!-- Hidden Names (Revealed after scratching) - Tightly constrained so they fit 100% perfectly inside the heart bounds -->
-                <div class="absolute inset-0 flex flex-col items-center justify-center z-0 pointer-events-none" style="padding: 22% 12% 28% 12%;">
+                <!-- Hidden Names (Revealed after scratching) - Bounded strictly inside the heart's center area to prevent edge overflow while keeping text HUGE -->
+                <div class="absolute z-0 pointer-events-none flex flex-col items-center justify-center" style="top: 24%; bottom: 26%; left: 10%; right: 10%;">
                     <div class="w-full h-full flex flex-col items-center justify-center">
-                        <h1 class="font-cormorant text-xl sm:text-2xl md:text-3xl font-bold text-white leading-[1.15] tracking-wide drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] text-center w-full">
+                        <h1 class="font-cormorant text-2xl sm:text-3xl md:text-4xl font-bold text-white leading-[1.1] tracking-wide drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] text-center w-full">
                             <span class="text-[1.3em] text-gold">A</span>bdul <span class="text-[1.3em] text-gold">S</span>athar<br/>
                             <span class="text-[1.3em] text-gold">M</span>oomeen
                         </h1>
-                        <div class="text-gold font-cormorant italic text-lg sm:text-xl md:text-2xl my-1 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">&amp;</div>
-                        <h1 class="font-cormorant text-xl sm:text-2xl md:text-3xl font-bold text-white leading-[1.15] tracking-wide drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] text-center w-full">
+                        <div class="text-gold font-cormorant italic text-lg sm:text-2xl md:text-3xl my-0.5 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">&amp;</div>
+                        <h1 class="font-cormorant text-2xl sm:text-3xl md:text-4xl font-bold text-white leading-[1.1] tracking-wide drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] text-center w-full">
                             <span class="text-[1.3em] text-gold">R</span>ukzana<br/>
                             <span class="text-[1.3em] text-gold">F</span>athima
                         </h1>
@@ -234,9 +240,15 @@
             </div>
             
             <!-- Instruction Text -->
-            <p id="name-scratch-instruction" class="mt-4 text-gray-400 font-montserrat text-[10px] sm:text-xs tracking-widest uppercase font-medium transition-opacity duration-500">
+            <p id="name-scratch-instruction" class="mt-2 text-gray-400 font-montserrat text-[10px] sm:text-xs tracking-widest uppercase font-medium transition-opacity duration-500">
                 Scratch the gold heart to reveal
             </p>
+
+            <!-- Scroll Prompt (Revealed after name scratch) -->
+            <div id="scroll-prompt" class="opacity-0 translate-y-4 transition-all duration-1000 flex flex-col items-center mt-6 pointer-events-none">
+                <p class="text-gold font-montserrat text-[10px] sm:text-xs tracking-[0.2em] uppercase mb-2 font-medium">Scroll to reveal date</p>
+                <i data-lucide="chevron-down" class="text-gold w-5 h-5 animate-bounce"></i>
+            </div>
         </div>
 
         <!-- Invitation Text -->
@@ -374,17 +386,22 @@
         </div>
 
         <!-- Footer -->
-        <div class="w-full flex flex-col items-center pb-16 pt-8 reveal relative z-10" style="transition-delay: 200ms;">
+        <div class="w-full flex flex-col items-center pb-24 pt-8 reveal relative z-10" style="transition-delay: 200ms;">
             <div class="w-12 h-px bg-gold mb-8 opacity-50"></div>
             <p class="font-cormorant text-xl md:text-3xl text-gray-200 italic mb-2">
                 "And We created you in pairs"
             </p>
-            <p class="font-montserrat text-xs text-gold/80 mb-6 font-medium tracking-widest">
+            <p class="font-montserrat text-xs text-gold/80 mb-10 font-medium tracking-widest">
                 [Quran 78:8]
             </p>
-            <p class="font-montserrat text-[10px] md:text-xs tracking-[0.3em] text-gray-400 uppercase font-light">
-                We eagerly await your presence
-            </p>
+            
+            <!-- Credits Footer -->
+            <div class="mt-8 pt-8 border-t border-white/10 flex flex-col items-center opacity-50 hover:opacity-100 transition-opacity duration-300 w-full max-w-[200px]">
+                <p class="font-montserrat text-[9px] tracking-[0.2em] text-gray-400 uppercase mb-2">Crafted with ♥ by</p>
+                <a href="tel:+918056535112" class="font-cinzel text-xs text-gold flex items-center justify-center gap-2 tracking-widest hover:text-white transition-colors">
+                    RIYAZ <i data-lucide="phone" class="w-3 h-3 text-gold"></i> 8056535112
+                </a>
+            </div>
         </div>
 
     </div>
@@ -600,7 +617,7 @@
                 
                 // Natural scratch brush (irregular clustered circles imitating coin scratching foil)
                 const numScratches = 6;
-                const baseRadius = 20; 
+                const baseRadius = 24; 
                 
                 for (let i = 0; i < numScratches; i++) {
                     const offsetX = (Math.random() - 0.5) * 20;
@@ -644,6 +661,13 @@
                     const instruction = document.getElementById('name-scratch-instruction');
                     if(instruction) {
                         instruction.style.opacity = '0';
+                    }
+
+                    // Reveal Scroll Prompt
+                    const scrollPrompt = document.getElementById('scroll-prompt');
+                    if(scrollPrompt) {
+                        scrollPrompt.classList.remove('opacity-0', 'translate-y-4');
+                        scrollPrompt.classList.add('opacity-100', 'translate-y-0');
                     }
                     
                     fireConfetti();
