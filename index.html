@@ -201,7 +201,7 @@
     <div class="relative z-10 container mx-auto px-4 py-16 flex flex-col items-center min-h-screen text-center">
         
         <!-- Hero Section / Intro -->
-        <div class="w-full flex flex-col items-center reveal mb-10" style="transition-delay: 100ms;">
+        <div class="w-full flex flex-col items-center reveal mb-8" style="transition-delay: 100ms;">
             <div class="mb-6 font-cormorant text-2xl md:text-3xl text-gold drop-shadow-md tracking-widest">
                 بِسْمِ ٱللَّٰهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ
             </div>
@@ -210,25 +210,22 @@
             </p>
         </div>
 
-        <!-- NEW: White Scratch Card with Authentic Glitter Heart (Name Reveal) -->
+        <!-- NEW: Floating Authentic Glitter Heart (Name Reveal) without background box -->
         <div class="w-full flex flex-col items-center reveal mb-10" style="transition-delay: 200ms;">
-            <div class="bg-white rounded-[2rem] shadow-[0_0_40px_rgba(228,200,110,0.15)] p-8 md:p-12 w-full max-w-[340px] sm:max-w-[400px] flex flex-col items-center relative overflow-hidden group border-2 border-white/20">
-                
-                <!-- Inner elegant border -->
-                <div class="absolute inset-2 border border-gold/30 rounded-[1.5rem] pointer-events-none"></div>
+            <div class="w-full max-w-[360px] sm:max-w-[460px] flex flex-col items-center relative group">
                 
                 <!-- Scratch Area Container -->
-                <div class="relative w-full aspect-square flex flex-col items-center justify-center pt-4">
+                <div class="relative w-full aspect-square flex flex-col items-center justify-center">
                     
-                    <!-- Hidden Names (Revealed after scratching) - Sized carefully to hide within the heart boundary -->
-                    <div class="text-center z-0 w-[70%] max-w-[220px] flex flex-col items-center justify-center">
-                        <h1 class="font-cormorant text-3xl sm:text-4xl font-bold text-gray-900 leading-tight tracking-wide">
-                            <span class="text-[1.4em] text-[#b38728]">A</span>bdul <span class="text-[1.4em] text-[#b38728]">S</span>athar<br/>
-                            <span class="text-[1.4em] text-[#b38728]">M</span>oomeen
+                    <!-- Hidden Names (Revealed after scratching) - Centered inside the heart -->
+                    <div class="text-center z-0 w-[75%] sm:w-[70%] flex flex-col items-center justify-center mt-[-15%] pointer-events-none">
+                        <h1 class="font-cormorant text-4xl sm:text-5xl font-bold text-white leading-none tracking-wide drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+                            <span class="text-[1.4em] text-gold">A</span>bdul <span class="text-[1.4em] text-gold">S</span>athar<br/>
+                            <span class="text-[1.4em] text-gold">M</span>oomeen
                         </h1>
-                        <div class="text-[#aa771c] font-cormorant italic text-3xl my-2">&amp;</div>
-                        <h1 class="font-cormorant text-3xl sm:text-4xl font-bold text-gray-900 leading-tight tracking-wide">
-                            <span class="text-[1.4em] text-[#b38728]">R</span>ukzana <span class="text-[1.4em] text-[#b38728]">F</span>athima
+                        <div class="text-gold font-cormorant italic text-3xl sm:text-4xl my-3 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">&amp;</div>
+                        <h1 class="font-cormorant text-4xl sm:text-5xl font-bold text-white leading-none tracking-wide drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+                            <span class="text-[1.4em] text-gold">R</span>ukzana <span class="text-[1.4em] text-gold">F</span>athima
                         </h1>
                     </div>
                     
@@ -237,7 +234,7 @@
                 </div>
                 
                 <!-- Instruction Text -->
-                <p id="name-scratch-instruction" class="mt-8 text-gray-400 font-montserrat text-[10px] sm:text-xs tracking-widest uppercase font-medium">
+                <p id="name-scratch-instruction" class="mt-4 text-gray-400 font-montserrat text-[10px] sm:text-xs tracking-widest uppercase font-medium">
                     Scratch the gold heart to reveal
                 </p>
             </div>
@@ -550,10 +547,10 @@
                 ctx.clearRect(0, 0, nameCanvas.width, nameCanvas.height);
 
                 // Setup the heart geometry and center it
+                const width = nameCanvas.width * 0.95; // Large enough to cover the text
+                const height = width * 0.95;
                 const cx = nameCanvas.width / 2;
-                const cy = nameCanvas.height / 2 - 10;
-                const width = nameCanvas.width * 0.85; // Large enough to cover the text
-                const height = width * 0.90;
+                const cy = (nameCanvas.height - height) / 2; // Perfectly centered vertically
 
                 ctx.save();
                 ctx.translate(cx, cy);
@@ -569,11 +566,11 @@
                 ctx.bezierCurveTo(width / 2, 0, 0, 0, 0, topCurveHeight);
                 ctx.closePath();
 
-                // Draw realistic drop shadow BEFORE clipping so the shadow spills outside the heart
-                ctx.shadowColor = 'rgba(0,0,0,0.15)';
-                ctx.shadowBlur = 12;
-                ctx.shadowOffsetY = 6;
-                ctx.fillStyle = '#b38728'; // solid base to catch shadow
+                // Draw realistic drop shadow BEFORE clipping so the glowing shadow spills beautifully outside the heart onto the dark galaxy
+                ctx.shadowColor = 'rgba(228, 200, 110, 0.4)'; // Golden glow
+                ctx.shadowBlur = 20;
+                ctx.shadowOffsetY = 0;
+                ctx.fillStyle = '#b38728'; 
                 ctx.fill();
 
                 // Now clip future drawing purely inside the heart path to prevent rectangular fills
@@ -605,17 +602,17 @@
                 ctx.globalCompositeOperation = 'destination-out';
                 
                 // Natural scratch brush (irregular clustered circles imitating coin scratching foil)
-                const numScratches = 5;
-                const baseRadius = 18; 
+                const numScratches = 6;
+                const baseRadius = 20; 
                 
                 for (let i = 0; i < numScratches; i++) {
-                    const offsetX = (Math.random() - 0.5) * 14;
-                    const offsetY = (Math.random() - 0.5) * 14;
-                    const radius = baseRadius + (Math.random() * 8);
+                    const offsetX = (Math.random() - 0.5) * 20;
+                    const offsetY = (Math.random() - 0.5) * 20;
+                    const radius = baseRadius + (Math.random() * 10);
                     
                     const brushGradient = ctx.createRadialGradient(x + offsetX, y + offsetY, 0, x + offsetX, y + offsetY, radius);
                     brushGradient.addColorStop(0, 'rgba(0,0,0,1)');
-                    brushGradient.addColorStop(0.6, 'rgba(0,0,0,0.9)');
+                    brushGradient.addColorStop(0.5, 'rgba(0,0,0,0.8)');
                     brushGradient.addColorStop(1, 'rgba(0,0,0,0)'); // Soft edge erasing
                     
                     ctx.fillStyle = brushGradient;
