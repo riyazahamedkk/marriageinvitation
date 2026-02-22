@@ -222,7 +222,7 @@
                 
                 <!-- Hidden Names (Revealed after scratching) - Bounded strictly inside the heart's center area to prevent edge overflow while keeping text HUGE -->
                 <div class="absolute z-0 pointer-events-none flex flex-col items-center justify-center" style="top: 24%; bottom: 26%; left: 10%; right: 10%;">
-                    <div class="w-full h-full flex flex-col items-center justify-center">
+                    <div id="names-content" class="w-full h-full flex flex-col items-center justify-center scale-50 transition-all duration-1000 ease-out">
                         <h1 class="font-cormorant text-2xl sm:text-3xl md:text-4xl font-bold text-white leading-[1.1] tracking-wide drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] text-center w-full">
                             <span class="text-[1.3em] text-gold">A</span>bdul <span class="text-[1.3em] text-gold">S</span>athar<br/>
                             <span class="text-[1.3em] text-gold">M</span>oomeen
@@ -649,6 +649,13 @@
                     isRevealed = true;
                     nameCanvas.style.opacity = '0';
                     nameCanvas.style.pointerEvents = 'none';
+
+                    // Transform names scale to pop big
+                    const namesContent = document.getElementById('names-content');
+                    if (namesContent) {
+                        namesContent.classList.remove('scale-50');
+                        namesContent.classList.add('scale-100');
+                    }
                     
                     const instruction = document.getElementById('name-scratch-instruction');
                     if(instruction) {
@@ -695,7 +702,7 @@
             
             let totalRevealed = 0;
 
-            canvases.forEach(canvas => {
+            canuses = canvases.forEach(canvas => {
                 if (!canvas) return;
                 
                 const container = canvas.parentElement;
