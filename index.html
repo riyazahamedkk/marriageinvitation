@@ -210,34 +210,33 @@
             </p>
         </div>
 
-        <!-- NEW: Floating Authentic Glitter Heart (Name Reveal) without background box -->
+        <!-- Floating Authentic Glitter Heart (Name Reveal) without background box -->
         <div class="w-full flex flex-col items-center reveal mb-10" style="transition-delay: 200ms;">
-            <div class="w-full max-w-[360px] sm:max-w-[460px] flex flex-col items-center relative group">
+            <div class="relative w-full max-w-[320px] sm:max-w-[400px] aspect-square flex flex-col items-center justify-center group mx-auto">
                 
-                <!-- Scratch Area Container -->
-                <div class="relative w-full aspect-square flex flex-col items-center justify-center">
-                    
-                    <!-- Hidden Names (Revealed after scratching) - Centered inside the heart -->
-                    <div class="text-center z-0 w-[75%] sm:w-[70%] flex flex-col items-center justify-center mt-[-15%] pointer-events-none">
-                        <h1 class="font-cormorant text-4xl sm:text-5xl font-bold text-white leading-none tracking-wide drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+                <!-- Hidden Names (Revealed after scratching) - Strictly bounded inside the heart's center -->
+                <div class="absolute z-0 pointer-events-none flex flex-col items-center justify-center" style="top: 34%; bottom: 22%; left: 15%; right: 15%;">
+                    <div class="w-full h-full flex flex-col items-center justify-center">
+                        <h1 class="font-cormorant text-[1.1rem] sm:text-xl md:text-2xl font-bold text-white leading-[1.15] tracking-wide drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] text-center w-full">
                             <span class="text-[1.4em] text-gold">A</span>bdul <span class="text-[1.4em] text-gold">S</span>athar<br/>
                             <span class="text-[1.4em] text-gold">M</span>oomeen
                         </h1>
-                        <div class="text-gold font-cormorant italic text-3xl sm:text-4xl my-3 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">&amp;</div>
-                        <h1 class="font-cormorant text-4xl sm:text-5xl font-bold text-white leading-none tracking-wide drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
-                            <span class="text-[1.4em] text-gold">R</span>ukzana <span class="text-[1.4em] text-gold">F</span>athima
+                        <div class="text-gold font-cormorant italic text-base sm:text-lg md:text-xl my-0.5 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">&amp;</div>
+                        <h1 class="font-cormorant text-[1.1rem] sm:text-xl md:text-2xl font-bold text-white leading-[1.15] tracking-wide drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] text-center w-full">
+                            <span class="text-[1.4em] text-gold">R</span>ukzana<br/>
+                            <span class="text-[1.4em] text-gold">F</span>athima
                         </h1>
                     </div>
-                    
-                    <!-- Canvas layer drawing purely the foil heart. Edges are completely transparent. -->
-                    <canvas id="name-scratch-canvas" class="absolute top-0 left-0 w-full h-full cursor-pointer z-10 transition-opacity duration-1000 touch-none"></canvas>
                 </div>
                 
-                <!-- Instruction Text -->
-                <p id="name-scratch-instruction" class="mt-4 text-gray-400 font-montserrat text-[10px] sm:text-xs tracking-widest uppercase font-medium">
-                    Scratch the gold heart to reveal
-                </p>
+                <!-- Canvas layer drawing purely the foil heart. Edges are completely transparent. -->
+                <canvas id="name-scratch-canvas" class="absolute top-0 left-0 w-full h-full cursor-pointer z-10 transition-opacity duration-1000 touch-none"></canvas>
             </div>
+            
+            <!-- Instruction Text -->
+            <p id="name-scratch-instruction" class="mt-4 text-gray-400 font-montserrat text-[10px] sm:text-xs tracking-widest uppercase font-medium transition-opacity duration-500">
+                Scratch the gold heart to reveal
+            </p>
         </div>
 
         <!-- Invitation Text -->
@@ -497,7 +496,6 @@
         function getGlitterPattern(ctx) {
             if (window.glitterPattern) return window.glitterPattern;
             
-            // Create off-screen canvas for the noise texture
             const noiseCanvas = document.createElement('canvas');
             noiseCanvas.width = 120;
             noiseCanvas.height = 120;
@@ -505,7 +503,6 @@
             const imgData = nCtx.createImageData(120, 120);
             const data = imgData.data;
             
-            // Generate dense gold noise
             for (let i = 0; i < data.length; i += 4) {
                 const rand = Math.random();
                 let r, g, b;
@@ -543,19 +540,19 @@
 
                 if (nameCanvas.width === 0) return;
 
-                // Ensure the background is entirely transparent (no white box)
+                // Ensure transparent canvas background
                 ctx.clearRect(0, 0, nameCanvas.width, nameCanvas.height);
 
-                // Setup the heart geometry and center it
-                const width = nameCanvas.width * 0.95; // Large enough to cover the text
-                const height = width * 0.95;
+                // Make heart width huge to fully encapsulate the underlying text
+                const width = nameCanvas.width * 0.98; 
+                const height = width * 0.90; 
                 const cx = nameCanvas.width / 2;
-                const cy = (nameCanvas.height - height) / 2; // Perfectly centered vertically
+                // Offset the center Y slightly down so the visual bulk of the heart sits exactly over the text
+                const cy = (nameCanvas.height - height) / 2 + (height * 0.05);
 
                 ctx.save();
                 ctx.translate(cx, cy);
                 
-                // Draw Perfect Heart Path
                 ctx.beginPath();
                 const topCurveHeight = height * 0.3;
                 
@@ -566,14 +563,14 @@
                 ctx.bezierCurveTo(width / 2, 0, 0, 0, 0, topCurveHeight);
                 ctx.closePath();
 
-                // Draw realistic drop shadow BEFORE clipping so the glowing shadow spills beautifully outside the heart onto the dark galaxy
+                // Realistic drop shadow BEFORE clipping
                 ctx.shadowColor = 'rgba(228, 200, 110, 0.4)'; // Golden glow
                 ctx.shadowBlur = 20;
                 ctx.shadowOffsetY = 0;
                 ctx.fillStyle = '#b38728'; 
                 ctx.fill();
 
-                // Now clip future drawing purely inside the heart path to prevent rectangular fills
+                // Clip drawing to heart path
                 ctx.clip();
                 ctx.shadowColor = 'transparent';
 
@@ -627,7 +624,6 @@
                 if (isRevealed || !hasScratchedSinceLastCheck) return;
                 hasScratchedSinceLastCheck = false;
 
-                // Check center area to see if enough is scratched
                 const imageData = ctx.getImageData(nameCanvas.width*0.2, nameCanvas.height*0.2, nameCanvas.width*0.6, nameCanvas.height*0.6);
                 const pixels = imageData.data;
                 let transparentPixels = 0;
@@ -650,7 +646,7 @@
                         instruction.style.opacity = '0';
                     }
                     
-                    fireConfetti(); // Trigger confetti on Name Reveal
+                    fireConfetti();
                 }
             };
 
@@ -707,11 +703,9 @@
                     ctx.beginPath();
                     ctx.arc(cx, cy, radius, 0, Math.PI * 2);
                     
-                    // Match realistic foil look on date circles too!
                     ctx.fillStyle = getGlitterPattern(ctx);
                     ctx.fill();
 
-                    // Overlay shiny gradient
                     const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
                     gradient.addColorStop(0, 'rgba(255,255,255,0.3)'); 
                     gradient.addColorStop(0.5, 'rgba(255,255,255,0)'); 
@@ -736,7 +730,6 @@
                 const scratch = (x, y) => {
                     ctx.globalCompositeOperation = 'destination-out';
                     
-                    // Natural foil scratch brush
                     const numScratches = 4;
                     const baseRadius = 15; 
                     
@@ -775,7 +768,6 @@
                         }
                     }
 
-                    // High sensitivity for mobile ease of use
                     if (transparentPixels / totalCirclePixels > 0.25) {
                         revealCard();
                     }
@@ -787,7 +779,6 @@
                     canvas.style.pointerEvents = 'none';
                     totalRevealed++;
 
-                    // Once all 3 circles are fully scratched, SHOW countdown and fire confetti
                     if (totalRevealed === canvases.length) {
                         fireConfetti();
                         
