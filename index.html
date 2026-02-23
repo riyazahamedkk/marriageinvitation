@@ -82,11 +82,14 @@
             background-color: #ffffff;
             border-radius: 50%;
             animation: twinkle infinite ease-in-out;
+            /* Added will-change for Android GPU acceleration */
+            will-change: opacity, transform; 
         }
 
+        /* Optimized Twinkle: Removed box-shadow animation which is very heavy on Android */
         @keyframes twinkle {
             0%, 100% { opacity: 0.2; transform: scale(0.8); }
-            50% { opacity: 1; transform: scale(1.2); box-shadow: 0 0 10px #fff, 0 0 20px rgba(255, 255, 255, 0.4); }
+            50% { opacity: 1; transform: scale(1.2); }
         }
 
         /* --- Shooting Stars --- */
@@ -95,8 +98,9 @@
             height: 2px;
             background: linear-gradient(-45deg, #e4c86e, rgba(0, 0, 255, 0));
             border-radius: 999px;
-            filter: drop-shadow(0 0 6px #e4c86e);
+            /* Removed filter: drop-shadow for major performance boost */
             animation: tail 3000ms ease-in-out infinite, shooting 3000ms ease-in-out infinite;
+            will-change: transform, width;
         }
         
         .shooting-star::before, .shooting-star::after {
@@ -109,6 +113,7 @@
             transform: translateX(50%) rotateZ(45deg);
             border-radius: 100%;
             animation: shining 3000ms ease-in-out infinite;
+            will-change: width;
         }
 
         .shooting-star::after {
@@ -135,10 +140,11 @@
         /* --- Glassmorphism Cards --- */
         .glass-card {
             background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+            /* Reduced blur amount significantly improves Android scrolling */
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             border: 1px solid rgba(228, 200, 110, 0.15);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
         /* --- Scroll Reveal Animation --- */
@@ -210,7 +216,7 @@
     </div>
 
     <!-- Floating PDF Download Button -->
-    <a href="images/E-Invitation.jpeg" download class="fixed bottom-6 right-6 z-[60] glass-card px-4 py-3 md:py-2.5 rounded-full flex items-center gap-2 text-gold hover:scale-105 hover:bg-white/10 transition-all duration-300 border border-gold/50 shadow-[0_0_20px_rgba(228,200,110,0.3)] group">
+    <a href="images/Invitation.pdf" download class="fixed bottom-6 right-6 z-[60] glass-card px-4 py-3 md:py-2.5 rounded-full flex items-center gap-2 text-gold hover:scale-105 hover:bg-white/10 transition-all duration-300 border border-gold/50 shadow-[0_0_20px_rgba(228,200,110,0.3)] group">
         <i data-lucide="download" class="w-5 h-5 md:w-4 md:h-4 group-hover:-translate-y-0.5 transition-transform"></i>
         <span class="text-[10px] md:text-xs font-montserrat font-bold tracking-widest uppercase hidden sm:block">E-Invite</span>
     </a>
@@ -232,7 +238,7 @@
         <div class="w-full flex flex-col items-center reveal mb-6" style="transition-delay: 200ms;">
             <div class="relative w-full max-w-[340px] sm:max-w-[420px] md:max-w-[460px] aspect-square flex flex-col items-center justify-center group mx-auto">
                 
-                <!-- Hidden Names (Revealed after scratching) - Bounded strictly inside the heart's center area to prevent edge overflow while keeping text HUGE -->
+                <!-- Hidden Names (Revealed after scratching) -->
                 <div class="absolute z-0 pointer-events-none flex flex-col items-center justify-center" style="top: 24%; bottom: 26%; left: 10%; right: 10%;">
                     <div id="names-content" class="w-full h-full flex flex-col items-center justify-center scale-50 transition-all duration-1000 ease-out">
                         <h1 class="font-amoresa text-3xl sm:text-4xl md:text-5xl font-bold text-white leading-[1.1] tracking-wide drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] text-center w-full">
@@ -247,7 +253,7 @@
                     </div>
                 </div>
                 
-                <!-- Canvas layer drawing purely the foil heart. Edges are completely transparent. -->
+                <!-- Canvas layer drawing purely the foil heart. -->
                 <canvas id="name-scratch-canvas" class="absolute top-0 left-0 w-full h-full cursor-pointer z-10 transition-opacity duration-1000 touch-none"></canvas>
             </div>
             
@@ -272,7 +278,7 @@
             <div class="w-24 h-px bg-gold/50 mx-auto mt-8 mb-4"></div>
         </div>
 
-        <!-- Layout for Date, Countdown, Location, Lunch with even spacing -->
+        <!-- Layout for Date, Countdown, Location, Lunch -->
         <div class="flex flex-col gap-16 md:gap-24 items-center w-full max-w-5xl my-10">
             
             <!-- 1. The Date (Scratch Reveal) -->
@@ -302,7 +308,7 @@
                 </div>
             </div>
 
-            <!-- 2. Countdown Timer (Hidden until Date Scratch is complete) -->
+            <!-- 2. Countdown Timer -->
             <div id="countdown-section" class="w-full hidden flex-col items-center relative z-10 opacity-0 transition-opacity duration-1000">
                 <h2 class="font-cinzel text-lg md:text-2xl text-gold tracking-[0.2em] mb-6 drop-shadow-md">Time Remaining</h2>
                 <div class="grid grid-cols-4 gap-3 md:gap-6 max-w-lg mx-auto font-montserrat w-full px-2 md:px-4">
@@ -325,7 +331,7 @@
                 </div>
             </div>
 
-            <!-- 3. The Ceremony (Location) -->
+            <!-- 3. The Ceremony -->
             <div class="w-full reveal relative z-10 px-4 md:px-0">
                 <div class="glass-card bg-topo p-8 md:p-12 rounded-3xl w-full flex flex-col md:flex-row items-center justify-between text-left shadow-2xl relative overflow-hidden group border-t border-white/10">
                     <div class="absolute inset-0 bg-gradient-to-r from-galaxy-800/80 to-transparent"></div>
@@ -360,7 +366,7 @@
                 </div>
             </div>
 
-            <!-- 4. The Feast (Lunch) -->
+            <!-- 4. The Feast -->
             <div class="w-full reveal relative z-10 px-4 md:px-0">
                 <div class="glass-card bg-topo p-8 md:p-12 rounded-3xl w-full flex flex-col md:flex-row items-center justify-between text-left shadow-2xl relative overflow-hidden group border-t border-white/10">
                     <div class="absolute inset-0 bg-gradient-to-r from-galaxy-800/80 to-transparent"></div>
@@ -513,6 +519,37 @@
             }
         }
 
+        // --- Performance Fix: Pre-rendered Scratch Brushes ---
+        // Generates the brush once instead of calculating gradients 60x a second on move
+        const createScratchBrush = (baseRadius, numScratches, spread) => {
+            const size = (baseRadius + spread) * 3;
+            const canvas = document.createElement('canvas');
+            canvas.width = size;
+            canvas.height = size;
+            const ctx = canvas.getContext('2d');
+            const center = size / 2;
+
+            for (let i = 0; i < numScratches; i++) {
+                const offsetX = (Math.random() - 0.5) * spread;
+                const offsetY = (Math.random() - 0.5) * spread;
+                const radius = baseRadius + (Math.random() * (spread * 0.5));
+
+                const brushGradient = ctx.createRadialGradient(center + offsetX, center + offsetY, 0, center + offsetX, center + offsetY, radius);
+                brushGradient.addColorStop(0, 'rgba(0,0,0,1)');
+                brushGradient.addColorStop(0.5, 'rgba(0,0,0,0.8)');
+                brushGradient.addColorStop(1, 'rgba(0,0,0,0)');
+
+                ctx.fillStyle = brushGradient;
+                ctx.beginPath();
+                ctx.arc(center + offsetX, center + offsetY, radius, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            return canvas;
+        };
+
+        const nameScratchBrush = createScratchBrush(24, 6, 20);
+        const dateScratchBrush = createScratchBrush(15, 4, 10);
+
         // --- Realistic Procedural Foil Generator ---
         function getGlitterPattern(ctx) {
             if (window.glitterPattern) return window.glitterPattern;
@@ -527,15 +564,10 @@
             for (let i = 0; i < data.length; i += 4) {
                 const rand = Math.random();
                 let r, g, b;
-                if (rand > 0.95) { // Bright sparkles
-                    r = 255; g = 250; b = 210;
-                } else if (rand > 0.5) { // Base metallic gold
-                    r = 205 + (Math.random()*40-20); g = 165 + (Math.random()*40-20); b = 60 + (Math.random()*30-15);
-                } else if (rand > 0.2) { // Darker gold grain
-                    r = 175 + (Math.random()*30-15); g = 130 + (Math.random()*30-15); b = 40 + (Math.random()*20-10);
-                } else { // Shadows/pits in the foil
-                    r = 140 + (Math.random()*20-10); g = 100 + (Math.random()*20-10); b = 25 + (Math.random()*20-10);
-                }
+                if (rand > 0.95) { r = 255; g = 250; b = 210; } 
+                else if (rand > 0.5) { r = 205 + (Math.random()*40-20); g = 165 + (Math.random()*40-20); b = 60 + (Math.random()*30-15); } 
+                else if (rand > 0.2) { r = 175 + (Math.random()*30-15); g = 130 + (Math.random()*30-15); b = 40 + (Math.random()*20-10); } 
+                else { r = 140 + (Math.random()*20-10); g = 100 + (Math.random()*20-10); b = 25 + (Math.random()*20-10); }
                 data[i] = r; data[i+1] = g; data[i+2] = b; data[i+3] = 255;
             }
             nCtx.putImageData(imgData, 0, 0);
@@ -549,7 +581,8 @@
             if (!nameCanvas) return;
             
             const container = nameCanvas.parentElement;
-            const ctx = nameCanvas.getContext('2d', { willReadFrequently: true });
+            // Removed { willReadFrequently: true } - forces hardware rendering on Android Chrome
+            const ctx = nameCanvas.getContext('2d');
             let isDrawing = false;
             let isRevealed = false;
             let hasScratchedSinceLastCheck = false;
@@ -561,14 +594,11 @@
 
                 if (nameCanvas.width === 0) return;
 
-                // Ensure transparent canvas background
                 ctx.clearRect(0, 0, nameCanvas.width, nameCanvas.height);
 
-                // Make heart width huge to fully encapsulate the underlying text
                 const width = nameCanvas.width * 0.98; 
                 const height = width * 0.90; 
                 const cx = nameCanvas.width / 2;
-                // Offset the center Y slightly down so the visual bulk of the heart sits exactly over the text
                 const cy = (nameCanvas.height - height) / 2 + (height * 0.05);
 
                 ctx.save();
@@ -584,22 +614,18 @@
                 ctx.bezierCurveTo(width / 2, 0, 0, 0, 0, topCurveHeight);
                 ctx.closePath();
 
-                // Realistic drop shadow BEFORE clipping
-                ctx.shadowColor = 'rgba(228, 200, 110, 0.4)'; // Golden glow
+                ctx.shadowColor = 'rgba(228, 200, 110, 0.4)';
                 ctx.shadowBlur = 20;
                 ctx.shadowOffsetY = 0;
                 ctx.fillStyle = '#b38728'; 
                 ctx.fill();
 
-                // Clip drawing to heart path
                 ctx.clip();
                 ctx.shadowColor = 'transparent';
 
-                // Fill with procedural realistic foil
                 ctx.fillStyle = getGlitterPattern(ctx);
                 ctx.fillRect(-width, -height, width * 2, height * 2);
 
-                // Add 3D metallic lighting overlay
                 const gradient = ctx.createLinearGradient(-width/2, -height/2, width/2, height);
                 gradient.addColorStop(0, 'rgba(255, 255, 255, 0.45)');
                 gradient.addColorStop(0.35, 'rgba(255, 255, 255, 0)');
@@ -618,26 +644,8 @@
 
             const scratch = (x, y) => {
                 ctx.globalCompositeOperation = 'destination-out';
-                
-                // Natural scratch brush (irregular clustered circles imitating coin scratching foil)
-                const numScratches = 6;
-                const baseRadius = 24; 
-                
-                for (let i = 0; i < numScratches; i++) {
-                    const offsetX = (Math.random() - 0.5) * 20;
-                    const offsetY = (Math.random() - 0.5) * 20;
-                    const radius = baseRadius + (Math.random() * 10);
-                    
-                    const brushGradient = ctx.createRadialGradient(x + offsetX, y + offsetY, 0, x + offsetX, y + offsetY, radius);
-                    brushGradient.addColorStop(0, 'rgba(0,0,0,1)');
-                    brushGradient.addColorStop(0.5, 'rgba(0,0,0,0.8)');
-                    brushGradient.addColorStop(1, 'rgba(0,0,0,0)'); // Soft edge erasing
-                    
-                    ctx.fillStyle = brushGradient;
-                    ctx.beginPath();
-                    ctx.arc(x + offsetX, y + offsetY, radius, 0, Math.PI * 2);
-                    ctx.fill();
-                }
+                // Optimized Draw: Uses pre-rendered brush instead of calculating math
+                ctx.drawImage(nameScratchBrush, x - nameScratchBrush.width / 2, y - nameScratchBrush.height / 2);
                 hasScratchedSinceLastCheck = true;
             };
 
@@ -652,9 +660,7 @@
 
                 for (let i = 3; i < pixels.length; i += 128) { 
                     totalCirclePixels++;
-                    if (pixels[i] < 128) {
-                        transparentPixels++;
-                    }
+                    if (pixels[i] < 128) transparentPixels++;
                 }
 
                 if (transparentPixels / totalCirclePixels > 0.35) {
@@ -662,7 +668,6 @@
                     nameCanvas.style.opacity = '0';
                     nameCanvas.style.pointerEvents = 'none';
 
-                    // Transform names scale to pop big
                     const namesContent = document.getElementById('names-content');
                     if (namesContent) {
                         namesContent.classList.remove('scale-50');
@@ -670,11 +675,8 @@
                     }
                     
                     const instruction = document.getElementById('name-scratch-instruction');
-                    if(instruction) {
-                        instruction.style.opacity = '0';
-                    }
+                    if(instruction) instruction.style.opacity = '0';
 
-                    // Reveal Scroll Prompt
                     const scrollPrompt = document.getElementById('scroll-prompt');
                     if(scrollPrompt) {
                         scrollPrompt.classList.remove('opacity-0', 'translate-y-4');
@@ -714,11 +716,11 @@
             
             let totalRevealed = 0;
 
-            canuses = canvases.forEach(canvas => {
+            canvases.forEach(canvas => {
                 if (!canvas) return;
                 
                 const container = canvas.parentElement;
-                const ctx = canvas.getContext('2d', { willReadFrequently: true });
+                const ctx = canvas.getContext('2d');
                 let isDrawing = false;
                 let isRevealed = false;
                 let hasScratchedSinceLastCheck = false;
@@ -764,26 +766,8 @@
 
                 const scratch = (x, y) => {
                     ctx.globalCompositeOperation = 'destination-out';
-                    
-                    const numScratches = 4;
-                    const baseRadius = 15; 
-                    
-                    for (let i = 0; i < numScratches; i++) {
-                        const offsetX = (Math.random() - 0.5) * 10;
-                        const offsetY = (Math.random() - 0.5) * 10;
-                        const radius = baseRadius + (Math.random() * 6);
-                        
-                        const brushGradient = ctx.createRadialGradient(x + offsetX, y + offsetY, 0, x + offsetX, y + offsetY, radius);
-                        brushGradient.addColorStop(0, 'rgba(0,0,0,1)');
-                        brushGradient.addColorStop(0.6, 'rgba(0,0,0,0.9)');
-                        brushGradient.addColorStop(1, 'rgba(0,0,0,0)');
-                        
-                        ctx.fillStyle = brushGradient;
-                        ctx.beginPath();
-                        ctx.arc(x + offsetX, y + offsetY, radius, 0, Math.PI * 2);
-                        ctx.fill();
-                    }
-                    
+                    // Optimized Draw
+                    ctx.drawImage(dateScratchBrush, x - dateScratchBrush.width / 2, y - dateScratchBrush.height / 2);
                     hasScratchedSinceLastCheck = true;
                 };
 
@@ -798,9 +782,7 @@
 
                     for (let i = 3; i < pixels.length; i += 256) { 
                         totalCirclePixels++;
-                        if (pixels[i] < 128) {
-                            transparentPixels++;
-                        }
+                        if (pixels[i] < 128) transparentPixels++;
                     }
 
                     if (transparentPixels / totalCirclePixels > 0.25) {
